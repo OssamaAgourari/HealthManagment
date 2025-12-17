@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "312895363032",
+    "project_id": "health-management-cdaed",
+    "storage_bucket": "health-management-cdaed.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:312895363032:android:447a788d2e81a8d30684ad",
+        "android_client_info": {
+          "package_name": "com.example.health"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxNTMrHPsrCz_JM8E48Wws5rUYijprpX0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

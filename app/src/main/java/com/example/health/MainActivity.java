@@ -30,13 +30,13 @@ public class MainActivity extends AppCompatActivity {
         //Connecte la bouttom nav an nav controller
         NavigationUI.setupWithNavController(binding.bottomNavigationView, navController);
         //affiche / cache la bottom nav selon l'écran
-        /*navController.addOnDestinationChangedListener((controller, destination, arguments) ->{
+        navController.addOnDestinationChangedListener((controller, destination, arguments) ->{
             int destId = destination.getId();
             if(destId == R.id.loginFragment || destId == R.id.registerFragment || destId == R.id.forgotPasswordFragment){
                 binding.bottomNavigationView.setVisibility(View.GONE);
             } else {
                 binding.bottomNavigationView.setVisibility(View.VISIBLE);
             }
-        });*/
+        });
     }
 }
