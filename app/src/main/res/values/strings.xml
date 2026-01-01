@@ -2,4 +2,14 @@
     <string name="app_name">Health</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Types de consultation -->
+    <string-array name="specialites">
+        <item>Généraliste</item>
+        <item>Cardiologie</item>
+        <item>Dermatologie</item>
+        <item>Pédiatrie</item>
+        <item>Gynécologie</item>
+        <item>Neurologie</item>
+    </string-array>
 </resources>

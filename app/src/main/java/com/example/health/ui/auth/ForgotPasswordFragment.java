@@ -1,4 +1,4 @@
-package com.example.health.ui;
+package com.example.health.ui.auth;
 
 import android.os.Bundle;
 
@@ -12,10 +12,10 @@ import com.example.health.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DoctorsFragment#newInstance} factory method to
+ * Use the {@link ForgotPasswordFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DoctorsFragment extends Fragment {
+public class ForgotPasswordFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -26,7 +26,7 @@ public class DoctorsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public DoctorsFragment() {
+    public ForgotPasswordFragment() {
         // Required empty public constructor
     }
 
@@ -36,11 +36,11 @@ public class DoctorsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment DoctorsFragment.
+     * @return A new instance of fragment ForgotPasswordFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DoctorsFragment newInstance(String param1, String param2) {
-        DoctorsFragment fragment = new DoctorsFragment();
+    public static ForgotPasswordFragment newInstance(String param1, String param2) {
+        ForgotPasswordFragment fragment = new ForgotPasswordFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -61,6 +61,6 @@ public class DoctorsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_doctors, container, false);
+        return inflater.inflate(R.layout.fragment_forgot_password, container, false);
     }
 }

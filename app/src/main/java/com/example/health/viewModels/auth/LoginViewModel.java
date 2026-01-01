@@ -1,4 +1,4 @@
-package com.example.health.viewModels;
+package com.example.health.viewModels.auth;
 
 import android.util.Log;
 
@@ -6,17 +6,19 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-public class UserViewModel extends ViewModel {
+public class LoginViewModel extends ViewModel {
     private final String TAG = "UserViewModel";
     private FirebaseAuth auth;
+    private FirebaseFirestore db;
     private MutableLiveData<String> email = new MutableLiveData<>("");
     private MutableLiveData<String> password = new MutableLiveData<>("");
     private MutableLiveData<String> erreurMessage = new MutableLiveData<>("");
     private MutableLiveData<Boolean> isLogedIn = new MutableLiveData<>(false);
 
     // Constructeur
-    public UserViewModel(){
+    public LoginViewModel(){
         auth = FirebaseAuth.getInstance();
     }
 

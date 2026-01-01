@@ -1,4 +1,4 @@
-package com.example.health.ui;
+package com.example.health.ui.auth;
 
 import android.os.Bundle;
 
@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
-import androidx.navigation.NavHostController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -14,18 +13,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.health.R;
 import com.example.health.databinding.FragmentLoginBinding;
-import com.example.health.viewModels.UserViewModel;
+import com.example.health.viewModels.auth.LoginViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
 public class LoginFragment extends Fragment {
     private NavController navController;
     private FragmentLoginBinding binding;
-    private UserViewModel viewModel;
+    private LoginViewModel viewModel;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = FragmentLoginBinding.inflate(getLayoutInflater());
-        viewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        viewModel = new ViewModelProvider(this).get(LoginViewModel.class);
         binding.setVm(viewModel);
         binding.setLifecycleOwner(this);
         navController = NavHostFragment.findNavController(this);
