@@ -1,66 +1,153 @@
 package com.example.health.ui.appointment;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.health.R;
+import com.example.health.adapters.AppointmentAdapter;
+import com.example.health.model.Appointment;
+import com.example.health.viewModels.AppointmentViewModel;
+import com.google.firebase.auth.FirebaseAuth;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link MyAppointmentsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class MyAppointmentsFragment extends Fragment {
+import java.util.List;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class MyAppointmentsFragment extends Fragment implements AppointmentAdapter.OnAppointmentActionListener {
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private AppointmentViewModel viewModel;
+    private AppointmentAdapter adapter;
+
+    // UI Components
+    private RecyclerView recyclerView;
+    private LinearLayout emptyStateLayout;
+    private ProgressBar loadingProgressBar;
+    private TextView appointmentsCountText;
 
     public MyAppointmentsFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MyAppointmentsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static MyAppointmentsFragment newInstance(String param1, String param2) {
-        MyAppointmentsFragment fragment = new MyAppointmentsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_my_appointments, container, false);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize ViewModel
+        viewModel = new ViewModelProvider(this).get(AppointmentViewModel.class);
+
+        // Initialize views
+        recyclerView = view.findViewById(R.id.appointmentsRecyclerView);
+        emptyStateLayout = view.findViewById(R.id.emptyStateLayout);
+        loadingProgressBar = view.findViewById(R.id.loadingProgressBar);
+        appointmentsCountText = view.findViewById(R.id.appointmentsCountText);
+
+        // Setup RecyclerView
+        adapter = new AppointmentAdapter(this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setAdapter(adapter);
+
+        // Observe appointments
+        viewModel.getAppointments().observe(getViewLifecycleOwner(), this::displayAppointments);
+
+        // Observe loading state
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                loadingProgressBar.setVisibility(View.VISIBLE);
+            } else {
+                loadingProgressBar.setVisibility(View.GONE);
+            }
+        });
+
+        // Observe cancel success
+        viewModel.getCancelSuccess().observe(getViewLifecycleOwner(), success -> {
+            if (success != null && success) {
+                Toast.makeText(requireContext(),
+                    "Rendez-vous annulé avec succès",
+                    Toast.LENGTH_SHORT).show();
+                // Reload appointments
+                loadAppointments();
+            }
+        });
+
+        // Observe errors
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+            if (error != null && !error.isEmpty()) {
+                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Load appointments
+        loadAppointments();
+    }
+
+    private void loadAppointments() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            String patientId = auth.getCurrentUser().getUid();
+            viewModel.loadPatientAppointments(patientId);
+        } else {
+            Toast.makeText(requireContext(),
+                "Vous devez être connecté",
+                Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void displayAppointments(List<Appointment> appointments) {
+        if (appointments == null || appointments.isEmpty()) {
+            // Show empty state
+            recyclerView.setVisibility(View.GONE);
+            emptyStateLayout.setVisibility(View.VISIBLE);
+            appointmentsCountText.setText("0 rendez-vous");
+        } else {
+            // Show appointments
+            recyclerView.setVisibility(View.VISIBLE);
+            emptyStateLayout.setVisibility(View.GONE);
+            adapter.setAppointments(appointments);
+
+            // Update count
+            int count = appointments.size();
+            appointmentsCountText.setText(count + (count > 1 ? " rendez-vous" : " rendez-vous"));
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_my_appointments, container, false);
+    public void onCancelAppointment(Appointment appointment) {
+        // Show confirmation dialog
+        new AlertDialog.Builder(requireContext())
+            .setTitle("Annuler le rendez-vous")
+            .setMessage("Êtes-vous sûr de vouloir annuler ce rendez-vous avec " +
+                appointment.getDoctorName() + " le " + appointment.getDate() +
+                " à " + appointment.getTime() + "?")
+            .setPositiveButton("Oui, annuler", (dialog, which) -> {
+                // Cancel appointment
+                viewModel.cancelAppointment(appointment.getId());
+            })
+            .setNegativeButton("Non", null)
+            .show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Reload appointments when fragment is resumed
+        loadAppointments();
     }
 }

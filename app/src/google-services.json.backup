@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "517077156106",
-    "project_id": "my-health-app-8f824",
-    "storage_bucket": "my-health-app-8f824.firebasestorage.app"
+    "project_number": "312895363032",
+    "project_id": "health-management-cdaed",
+    "storage_bucket": "health-management-cdaed.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:517077156106:android:27f34feb405522d510baf3",
+        "mobilesdk_app_id": "1:312895363032:android:447a788d2e81a8d30684ad",
         "android_client_info": {
           "package_name": "com.example.health"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD3kHpkMCGu6PDjiW2JJc1D365-DubR0bs"
+          "current_key": "AIzaSyDxNTMrHPsrCz_JM8E48Wws5rUYijprpX0"
         }
       ],
       "services": {
