@@ -1,66 +1,128 @@
 package com.example.health.ui.profile;
 
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.health.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private TextView profileName;
+    private TextView profileEmail;
+    private TextView profileFullName;
+    private TextView profilePhone;
+    private TextView profileMemberSince;
+    private Button logoutButton;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FirebaseAuth auth;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
-        ProfileFragment fragment = new ProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance();
+
+        // Initialize views
+        profileName = view.findViewById(R.id.profileName);
+        profileEmail = view.findViewById(R.id.profileEmail);
+        profileFullName = view.findViewById(R.id.profileFullName);
+        profilePhone = view.findViewById(R.id.profilePhone);
+        profileMemberSince = view.findViewById(R.id.profileMemberSince);
+        logoutButton = view.findViewById(R.id.logoutButton);
+
+        // Load user data
+        loadUserData();
+
+        // Logout button
+        logoutButton.setOnClickListener(v -> showLogoutDialog());
+    }
+
+    private void loadUserData() {
+        FirebaseUser currentUser = auth.getCurrentUser();
+
+        if (currentUser != null) {
+            // Display Name
+            String displayName = currentUser.getDisplayName();
+            if (displayName != null && !displayName.isEmpty()) {
+                profileName.setText(displayName);
+                profileFullName.setText(displayName);
+            } else {
+                String email = currentUser.getEmail();
+                if (email != null) {
+                    String name = email.split("@")[0];
+                    profileName.setText(name);
+                    profileFullName.setText(name);
+                } else {
+                    profileName.setText("Utilisateur");
+                    profileFullName.setText("Non renseigné");
+                }
+            }
+
+            // Email
+            String email = currentUser.getEmail();
+            if (email != null) {
+                profileEmail.setText(email);
+            } else {
+                profileEmail.setText("Email non disponible");
+            }
+
+            // Phone
+            String phone = currentUser.getPhoneNumber();
+            if (phone != null && !phone.isEmpty()) {
+                profilePhone.setText(phone);
+            } else {
+                profilePhone.setText("Non renseigné");
+            }
+
+            // Member Since (account creation time)
+            long creationTimestamp = currentUser.getMetadata().getCreationTimestamp();
+            SimpleDateFormat sdf = new SimpleDateFormat("MMMM yyyy", Locale.FRENCH);
+            String memberSince = sdf.format(new Date(creationTimestamp));
+            profileMemberSince.setText(memberSince);
+        }
+    }
+
+    private void showLogoutDialog() {
+        new AlertDialog.Builder(requireContext())
+            .setTitle("Déconnexion")
+            .setMessage("Êtes-vous sûr de vouloir vous déconnecter?")
+            .setPositiveButton("Oui", (dialog, which) -> {
+                // Logout
+                auth.signOut();
+
+                // Navigate to login screen
+                Navigation.findNavController(requireView())
+                    .navigate(R.id.loginFragment);
+            })
+            .setNegativeButton("Non", null)
+            .show();
     }
 }

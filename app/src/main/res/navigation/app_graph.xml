@@ -5,6 +5,37 @@
     android:id="@+id/app_graph"
     app:startDestination="@id/loginFragment">
 
+    <!-- Global Actions for Bottom Navigation -->
+    <action
+        android:id="@+id/action_global_homeFragment"
+        app:destination="@id/homeFragment"
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="false" />
+
+    <action
+        android:id="@+id/action_global_doctorsListFragment"
+        app:destination="@id/doctorsListFragment"
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="false" />
+
+    <action
+        android:id="@+id/action_global_myAppointmentsFragment"
+        app:destination="@id/myAppointmentsFragment"
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="false" />
+
+    <action
+        android:id="@+id/action_global_profileFragment"
+        app:destination="@id/profileFragment"
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="false" />
+
+    <action
+        android:id="@+id/action_global_patientFormFragment"
+        app:destination="@id/patientFormFragment"
+        app:popUpTo="@id/homeFragment"
+        app:popUpToInclusive="false" />
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.example.health.ui.auth.LoginFragment"
@@ -60,9 +91,31 @@
         android:id="@+id/profileFragment"
         android:name="com.example.health.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/patientFormFragment"
         android:name="com.example.health.ui.appointment.PatientFormFragment"
         android:label="PatientFormFragment" />
+    <fragment
+        android:id="@+id/doctorsListFragment"
+        android:name="com.example.health.ui.doctor.DoctorsListFragment"
+        android:label="Médecins" >
+        <action
+            android:id="@+id/action_doctorsListFragment_to_doctorDetailsFragment"
+            app:destination="@id/doctorDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/doctorDetailsFragment"
+        android:name="com.example.health.ui.doctor.DoctorDetailsFragment"
+        android:label="Détails médecin" >
+        <action
+            android:id="@+id/action_doctorDetailsFragment_to_bookApointementsFragment"
+            app:destination="@id/bookApointementsFragment" />
+    </fragment>
 </navigation>
