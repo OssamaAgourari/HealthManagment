@@ -6,12 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CalendarView;
-import android.widget.EditText;
 import android.widget.GridLayout;
-import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,54 +14,27 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.example.health.R;
-import com.example.health.model.Appointment;
+import com.example.health.databinding.FragmentBookApointementsBinding;
 import com.example.health.viewModels.AppointmentViewModel;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.android.material.snackbar.Snackbar;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Locale;
 
 public class BookApointementsFragment extends Fragment {
 
+    private FragmentBookApointementsBinding binding;
     private AppointmentViewModel viewModel;
-
-    // Doctor data from arguments
-    private String doctorId;
-    private String doctorName;
-    private String doctorSpecialty;
-    private double consultationFee;
-
-    // UI Components
-    private ImageButton backButton;
-    private TextView doctorNameText, doctorSpecialtyText, consultationFeeText;
-    private TextView selectedTimeText;
-    private CalendarView calendarView;
-    private GridLayout timeSlotsGrid;
-    private EditText reasonEditText;
-    private Button confirmBookingButton;
-
-    // Selected values
-    private String selectedDate = "";
-    private String selectedTime = "";
     private Button selectedTimeButton = null;
-
-    // Time slots
-    private final String[] timeSlots = {
-        "09:00", "10:00", "11:00",
-        "14:00", "15:00", "16:00",
-        "17:00", "18:00", "19:00"
-    };
 
     public BookApointementsFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_book_apointements, container, false);
+        binding = FragmentBookApointementsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
@@ -76,80 +44,35 @@ public class BookApointementsFragment extends Fragment {
         // Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(AppointmentViewModel.class);
 
-        // Get doctor data from arguments
+        // Get doctor data from arguments and pass to ViewModel
         if (getArguments() != null) {
-            doctorId = getArguments().getString("doctorId");
-            doctorName = getArguments().getString("doctorName");
-            doctorSpecialty = getArguments().getString("doctorSpecialty");
-            consultationFee = getArguments().getDouble("consultationFee", 0);
+            viewModel.initDoctorData(
+                    getArguments().getString("doctorId"),
+                    getArguments().getString("doctorName"),
+                    getArguments().getString("doctorSpecialty"),
+                    getArguments().getDouble("consultationFee", 0)
+            );
         }
 
-        // Initialize views
-        backButton = view.findViewById(R.id.backButton);
-        doctorNameText = view.findViewById(R.id.doctorNameText);
-        doctorSpecialtyText = view.findViewById(R.id.doctorSpecialtyText);
-        consultationFeeText = view.findViewById(R.id.consultationFeeText);
-        selectedTimeText = view.findViewById(R.id.selectedTimeText);
-        calendarView = view.findViewById(R.id.calendarView);
-        timeSlotsGrid = view.findViewById(R.id.timeSlotsGrid);
-        reasonEditText = view.findViewById(R.id.reasonEditText);
-        confirmBookingButton = view.findViewById(R.id.confirmBookingButton);
+        setupUI();
+        setupClickListeners();
+        observeViewModel();
+    }
 
-        // Back button
-        backButton.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigateUp();
-        });
-
-        // Display doctor information
-        doctorNameText.setText(doctorName);
-        doctorSpecialtyText.setText(doctorSpecialty);
-        consultationFeeText.setText(String.format("%.0f€", consultationFee));
-
+    private void setupUI() {
         // Setup calendar (minimum date is today)
-        calendarView.setMinDate(System.currentTimeMillis());
-
-        // Set default selected date to today
-        Calendar today = Calendar.getInstance();
-        selectedDate = formatDate(today.getTimeInMillis());
-
-        calendarView.setOnDateChangeListener((view1, year, month, dayOfMonth) -> {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(year, month, dayOfMonth);
-            selectedDate = formatDate(calendar.getTimeInMillis());
-        });
+        binding.calendarView.setMinDate(System.currentTimeMillis());
 
         // Setup time slots
         setupTimeSlots();
-
-        // Observe booking success
-        viewModel.getBookingSuccess().observe(getViewLifecycleOwner(), success -> {
-            if (success != null && success) {
-                Toast.makeText(requireContext(),
-                    "Rendez-vous confirmé avec succès!",
-                    Toast.LENGTH_LONG).show();
-                // Navigate back or to appointments list
-                Navigation.findNavController(view).navigateUp();
-            }
-        });
-
-        // Observe errors
-        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
-            if (error != null && !error.isEmpty()) {
-                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Confirm booking button
-        confirmBookingButton.setOnClickListener(v -> confirmBooking());
     }
 
     private void setupTimeSlots() {
-        timeSlotsGrid.removeAllViews();
+        binding.timeSlotsGrid.removeAllViews();
 
-        for (String timeSlot : timeSlots) {
+        for (String timeSlot : viewModel.getTimeSlots()) {
             Button timeButton = new Button(requireContext());
 
-            // Set button properties
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = 0;
             params.height = GridLayout.LayoutParams.WRAP_CONTENT;
@@ -162,10 +85,9 @@ public class BookApointementsFragment extends Fragment {
             timeButton.setBackgroundColor(Color.parseColor("#E0E0E0"));
             timeButton.setTextColor(Color.parseColor("#333333"));
 
-            // Click listener
             timeButton.setOnClickListener(v -> selectTimeSlot(timeButton, timeSlot));
 
-            timeSlotsGrid.addView(timeButton);
+            binding.timeSlotsGrid.addView(timeButton);
         }
     }
 
@@ -178,68 +100,88 @@ public class BookApointementsFragment extends Fragment {
 
         // Select new button
         selectedTimeButton = button;
-        selectedTime = time;
         button.setBackgroundColor(Color.parseColor("#4CAF50"));
         button.setTextColor(Color.WHITE);
 
-        // Show selected time
-        selectedTimeText.setText("Heure sélectionnée: " + time);
-        selectedTimeText.setVisibility(View.VISIBLE);
+        // Notify ViewModel
+        viewModel.selectTime(time);
     }
 
-    private void confirmBooking() {
-        // Validate inputs
-        if (selectedDate.isEmpty()) {
-            Toast.makeText(requireContext(), "Veuillez sélectionner une date", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (selectedTime.isEmpty()) {
-            Toast.makeText(requireContext(), "Veuillez sélectionner un créneau horaire", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Get current user
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() == null) {
-            Toast.makeText(requireContext(), "Vous devez être connecté", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        String patientId = auth.getCurrentUser().getUid();
-        String patientName = auth.getCurrentUser().getDisplayName();
-        if (patientName == null || patientName.isEmpty()) {
-            patientName = auth.getCurrentUser().getEmail();
-        }
-
-        String reason = reasonEditText.getText().toString().trim();
-        if (reason.isEmpty()) {
-            reason = "Consultation générale";
-        }
-
-        // Create appointment
-        Appointment appointment = new Appointment(
-            null, // ID will be generated by Firestore
-            patientId,
-            patientName,
-            doctorId,
-            doctorName,
-            doctorSpecialty,
-            selectedDate,
-            selectedTime,
-            "pending",
-            reason,
-            consultationFee,
-            null, // createdAt will be set by repository
-            null  // updatedAt will be set by repository
+    private void setupClickListeners() {
+        // Back button
+        binding.backButton.setOnClickListener(v ->
+                Navigation.findNavController(v).navigateUp()
         );
 
-        // Book appointment
-        viewModel.bookAppointment(appointment);
+        // Calendar date change
+        binding.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) ->
+                viewModel.selectDate(year, month, dayOfMonth)
+        );
+
+        // Confirm booking button
+        binding.confirmBookingButton.setOnClickListener(v -> {
+            String reason = binding.reasonEditText.getText().toString().trim();
+            viewModel.setReason(reason);
+            viewModel.confirmBooking();
+        });
     }
 
-    private String formatDate(long timeInMillis) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        return sdf.format(timeInMillis);
+    private void observeViewModel() {
+        // Observe doctor name
+        viewModel.getDoctorName().observe(getViewLifecycleOwner(), name -> {
+            if (name != null) {
+                binding.doctorNameText.setText(name);
+            }
+        });
+
+        // Observe doctor specialty
+        viewModel.getDoctorSpecialty().observe(getViewLifecycleOwner(), specialty -> {
+            if (specialty != null) {
+                binding.doctorSpecialtyText.setText(specialty);
+            }
+        });
+
+        // Observe consultation fee
+        viewModel.getConsultationFee().observe(getViewLifecycleOwner(), fee -> {
+            if (fee != null) {
+                binding.consultationFeeText.setText(String.format(Locale.getDefault(), "%.0f€", fee));
+            }
+        });
+
+        // Observe selected time display
+        viewModel.getSelectedTimeDisplay().observe(getViewLifecycleOwner(), timeDisplay -> {
+            if (timeDisplay != null && !timeDisplay.isEmpty()) {
+                binding.selectedTimeText.setText(timeDisplay);
+                binding.selectedTimeText.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Observe booking success
+        viewModel.getBookingSuccess().observe(getViewLifecycleOwner(), success -> {
+            if (success != null && success) {
+                Snackbar.make(binding.getRoot(), "Rendez-vous confirmé avec succès!", Snackbar.LENGTH_LONG).show();
+                Navigation.findNavController(requireView()).navigateUp();
+            }
+        });
+
+        // Observe error messages
+        viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
+            if (error != null && !error.isEmpty()) {
+                Snackbar.make(binding.getRoot(), error, Snackbar.LENGTH_SHORT).show();
+            }
+        });
+
+        // Observe loading state
+        viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading != null) {
+                binding.confirmBookingButton.setEnabled(!isLoading);
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

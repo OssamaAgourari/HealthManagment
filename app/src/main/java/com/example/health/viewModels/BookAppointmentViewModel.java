@@ -40,18 +40,25 @@ public class BookAppointmentViewModel extends ViewModel {
         }
 
         isLoading.setValue(true);
-        firestore.collection("patients")
+        // Les utilisateurs sont stockés dans la collection "users"
+        firestore.collection("users")
                 .document(user.getUid())
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        Patient patient = documentSnapshot.toObject(Patient.class);
-                        if (patient != null) {
-                            patient.setUid(user.getUid());
-                            currentPatient.setValue(patient);
-                        }
+                        // Mapper manuellement les données car la structure peut différer
+                        Patient patient = new Patient();
+                        patient.setUid(user.getUid());
+                        patient.setFirstName(documentSnapshot.getString("firstName"));
+                        patient.setLastName(documentSnapshot.getString("lastName"));
+                        patient.setEmail(documentSnapshot.getString("email"));
+                        patient.setPhone(documentSnapshot.getString("phone"));
+                        patient.setBirthDate(documentSnapshot.getString("birthDate"));
+                        patient.setGender(documentSnapshot.getString("gender"));
+
+                        currentPatient.setValue(patient);
                     } else {
-                        // If patient document doesn't exist, create from auth info
+                        // Si le document n'existe pas, créer depuis les infos Firebase Auth
                         Patient patient = new Patient();
                         patient.setUid(user.getUid());
                         patient.setEmail(user.getEmail());
