@@ -1,6 +1,6 @@
 package com.example.health.ui.appointment;
 
-import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +20,8 @@ import com.example.health.R;
 import com.example.health.adapters.AppointmentAdapter;
 import com.example.health.model.Appointment;
 import com.example.health.viewModels.AppointmentViewModel;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
@@ -79,9 +80,10 @@ public class MyAppointmentsFragment extends Fragment implements AppointmentAdapt
         // Observe cancel success
         viewModel.getCancelSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
-                Toast.makeText(requireContext(),
-                    "Rendez-vous annulé avec succès",
-                    Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, "Rendez-vous annulé avec succès", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(Color.parseColor("#4CAF50"))
+                    .setTextColor(Color.WHITE)
+                    .show();
                 // Reload appointments
                 loadAppointments();
             }
@@ -90,7 +92,10 @@ public class MyAppointmentsFragment extends Fragment implements AppointmentAdapt
         // Observe errors
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
             if (error != null && !error.isEmpty()) {
-                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, error, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.parseColor("#F44336"))
+                    .setTextColor(Color.WHITE)
+                    .show();
             }
         });
 
@@ -104,9 +109,10 @@ public class MyAppointmentsFragment extends Fragment implements AppointmentAdapt
             String patientId = auth.getCurrentUser().getUid();
             viewModel.loadPatientAppointments(patientId);
         } else {
-            Toast.makeText(requireContext(),
-                "Vous devez être connecté",
-                Toast.LENGTH_SHORT).show();
+            View view = getView();
+            if (view != null) {
+                Snackbar.make(view, "Vous devez être connecté", Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -130,14 +136,13 @@ public class MyAppointmentsFragment extends Fragment implements AppointmentAdapt
 
     @Override
     public void onCancelAppointment(Appointment appointment) {
-        // Show confirmation dialog
-        new AlertDialog.Builder(requireContext())
+        // Show Material confirmation dialog
+        new MaterialAlertDialogBuilder(requireContext())
             .setTitle("Annuler le rendez-vous")
             .setMessage("Êtes-vous sûr de vouloir annuler ce rendez-vous avec " +
                 appointment.getDoctorName() + " le " + appointment.getDate() +
                 " à " + appointment.getTime() + "?")
             .setPositiveButton("Oui, annuler", (dialog, which) -> {
-                // Cancel appointment
                 viewModel.cancelAppointment(appointment.getId());
             })
             .setNegativeButton("Non", null)

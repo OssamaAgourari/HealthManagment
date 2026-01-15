@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.health.model.Doctor;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.Source;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,29 +18,72 @@ public class DoctorRepository {
     private static final String COLLECTION = "doctors";
     private static final String TAG = "DoctorRepository";
 
+    public interface DoctorsCallback {
+        void onSuccess(List<Doctor> doctors);
+        void onError(String error);
+    }
+
     public DoctorRepository() {
         firestore = FirebaseFirestore.getInstance();
     }
 
-    // Get all doctors
-    public void getAllDoctors(MutableLiveData<List<Doctor>> doctorsLiveData,
-                              MutableLiveData<String> errorLiveData) {
+    // Get all doctors with callback (fast - uses cache first)
+    public void getAllDoctors(DoctorsCallback callback) {
+        // Try cache first for instant load
         firestore.collection(COLLECTION)
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    List<Doctor> doctors = new ArrayList<>();
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        Doctor doctor = document.toObject(Doctor.class);
-                        doctor.setId(document.getId());
-                        doctors.add(doctor);
+                .get(Source.CACHE)
+                .addOnSuccessListener(cacheSnapshot -> {
+                    if (!cacheSnapshot.isEmpty()) {
+                        List<Doctor> doctors = parseDoctors(cacheSnapshot);
+                        Log.d(TAG, "⚡ Loaded " + doctors.size() + " doctors from cache");
+                        callback.onSuccess(doctors);
                     }
-                    Log.d(TAG, "✅ Loaded " + doctors.size() + " doctors");
-                    doctorsLiveData.setValue(doctors);
+                    // Then fetch fresh data from server
+                    fetchFromServer(callback);
+                })
+                .addOnFailureListener(e -> {
+                    // No cache, fetch from server
+                    fetchFromServer(callback);
+                });
+    }
+
+    private void fetchFromServer(DoctorsCallback callback) {
+        firestore.collection(COLLECTION)
+                .get(Source.SERVER)
+                .addOnSuccessListener(serverSnapshot -> {
+                    List<Doctor> doctors = parseDoctors(serverSnapshot);
+                    Log.d(TAG, "✅ Loaded " + doctors.size() + " doctors from server");
+                    callback.onSuccess(doctors);
                 })
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "❌ Error loading doctors: " + e.getMessage());
-                    errorLiveData.setValue("Erreur de chargement des médecins");
+                    callback.onError("Erreur de chargement des médecins");
                 });
+    }
+
+    private List<Doctor> parseDoctors(com.google.firebase.firestore.QuerySnapshot snapshot) {
+        List<Doctor> doctors = new ArrayList<>();
+        for (QueryDocumentSnapshot document : snapshot) {
+            Doctor doctor = document.toObject(Doctor.class);
+            doctor.setId(document.getId());
+            doctors.add(doctor);
+        }
+        return doctors;
+    }
+
+    // Legacy method for compatibility
+    public void getAllDoctors(MutableLiveData<List<Doctor>> doctorsLiveData,
+                              MutableLiveData<String> errorLiveData) {
+        getAllDoctors(new DoctorsCallback() {
+            @Override
+            public void onSuccess(List<Doctor> doctors) {
+                doctorsLiveData.setValue(doctors);
+            }
+            @Override
+            public void onError(String error) {
+                errorLiveData.setValue(error);
+            }
+        });
     }
 
     // Get doctor by ID

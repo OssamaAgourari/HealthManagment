@@ -11,7 +11,6 @@ import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,6 +21,7 @@ import androidx.navigation.Navigation;
 import com.example.health.R;
 import com.example.health.model.Appointment;
 import com.example.health.viewModels.AppointmentViewModel;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
@@ -124,18 +124,22 @@ public class BookApointementsFragment extends Fragment {
         // Observe booking success
         viewModel.getBookingSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
-                Toast.makeText(requireContext(),
-                    "Rendez-vous confirmé avec succès!",
-                    Toast.LENGTH_LONG).show();
-                // Navigate back or to appointments list
-                Navigation.findNavController(view).navigateUp();
+                Snackbar.make(view, "Rendez-vous confirmé avec succès!", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(Color.parseColor("#4CAF50"))
+                    .setTextColor(Color.WHITE)
+                    .show();
+                // Navigate back after a short delay
+                view.postDelayed(() -> Navigation.findNavController(view).navigateUp(), 1500);
             }
         });
 
         // Observe errors
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
             if (error != null && !error.isEmpty()) {
-                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+                Snackbar.make(view, error, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.parseColor("#F44336"))
+                    .setTextColor(Color.WHITE)
+                    .show();
             }
         });
 
@@ -188,21 +192,24 @@ public class BookApointementsFragment extends Fragment {
     }
 
     private void confirmBooking() {
+        View view = getView();
+        if (view == null) return;
+
         // Validate inputs
         if (selectedDate.isEmpty()) {
-            Toast.makeText(requireContext(), "Veuillez sélectionner une date", Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "Veuillez sélectionner une date", Snackbar.LENGTH_SHORT).show();
             return;
         }
 
         if (selectedTime.isEmpty()) {
-            Toast.makeText(requireContext(), "Veuillez sélectionner un créneau horaire", Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "Veuillez sélectionner un créneau horaire", Snackbar.LENGTH_SHORT).show();
             return;
         }
 
         // Get current user
         FirebaseAuth auth = FirebaseAuth.getInstance();
         if (auth.getCurrentUser() == null) {
-            Toast.makeText(requireContext(), "Vous devez être connecté", Toast.LENGTH_SHORT).show();
+            Snackbar.make(view, "Vous devez être connecté", Snackbar.LENGTH_SHORT).show();
             return;
         }
 

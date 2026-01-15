@@ -1,9 +1,13 @@
 package com.example.health.ui.doctor;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +23,8 @@ import com.example.health.R;
 import com.example.health.adapters.DoctorAdapter;
 import com.example.health.model.Doctor;
 import com.example.health.viewModels.DoctorViewModel;
+import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.textfield.TextInputEditText;
 
 public class DoctorsListFragment extends Fragment implements DoctorAdapter.OnDoctorClickListener {
 
@@ -27,10 +33,9 @@ public class DoctorsListFragment extends Fragment implements DoctorAdapter.OnDoc
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
     private TextView emptyStateText;
-
-    public DoctorsListFragment() {
-        // Required empty public constructor
-    }
+    private TextInputEditText searchNameInput;
+    private AutoCompleteTextView specialtyFilter;
+    private ShimmerFrameLayout shimmerLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -42,28 +47,35 @@ public class DoctorsListFragment extends Fragment implements DoctorAdapter.OnDoc
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize views
-        recyclerView = view.findViewById(R.id.doctorsRecyclerView);
-        progressBar = view.findViewById(R.id.progressBar);
-        emptyStateText = view.findViewById(R.id.emptyStateText);
-
-        // Initialize ViewModel
-        viewModel = new ViewModelProvider(this).get(DoctorViewModel.class);
-
-        // Setup RecyclerView
-        adapter = new DoctorAdapter(this);
-        recyclerView.setAdapter(adapter);
-
-        // Observe data
-        observeViewModel();
-
-        // Load doctors
+        initViews(view);
+        setupViewModel();
+        setupFilters();
         viewModel.loadDoctors();
     }
 
-    private void observeViewModel() {
-        // Observe doctors list
+    private void initViews(View view) {
+        recyclerView = view.findViewById(R.id.doctorsRecyclerView);
+        progressBar = view.findViewById(R.id.progressBar);
+        emptyStateText = view.findViewById(R.id.emptyStateText);
+        searchNameInput = view.findViewById(R.id.searchNameInput);
+        specialtyFilter = view.findViewById(R.id.specialtyFilter);
+        shimmerLayout = view.findViewById(R.id.shimmerLayout);
+
+        adapter = new DoctorAdapter(this);
+        recyclerView.setAdapter(adapter);
+
+        // Start shimmer animation
+        shimmerLayout.startShimmer();
+    }
+
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(this).get(DoctorViewModel.class);
+
         viewModel.getDoctors().observe(getViewLifecycleOwner(), doctors -> {
+            // Hide shimmer when data arrives
+            shimmerLayout.stopShimmer();
+            shimmerLayout.setVisibility(View.GONE);
+
             if (doctors != null && !doctors.isEmpty()) {
                 adapter.setDoctors(doctors);
                 recyclerView.setVisibility(View.VISIBLE);
@@ -74,26 +86,54 @@ public class DoctorsListFragment extends Fragment implements DoctorAdapter.OnDoc
             }
         });
 
-        // Observe loading state
         viewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading != null && isLoading) {
-                progressBar.setVisibility(View.VISIBLE);
-            } else {
-                progressBar.setVisibility(View.GONE);
+                shimmerLayout.setVisibility(View.VISIBLE);
+                shimmerLayout.startShimmer();
+                recyclerView.setVisibility(View.GONE);
             }
         });
 
-        // Observe errors
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
             if (error != null && !error.isEmpty()) {
                 Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
             }
         });
+
+        viewModel.getSpecialties().observe(getViewLifecycleOwner(), specialties -> {
+            if (specialties != null) {
+                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                        requireContext(),
+                        android.R.layout.simple_dropdown_item_1line,
+                        specialties
+                );
+                specialtyFilter.setAdapter(adapter);
+            }
+        });
+    }
+
+    private void setupFilters() {
+        searchNameInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                viewModel.filterByName(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        specialtyFilter.setOnItemClickListener((parent, view, position, id) -> {
+            String selected = (String) parent.getItemAtPosition(position);
+            viewModel.filterBySpecialty(selected);
+        });
     }
 
     @Override
     public void onDoctorClick(Doctor doctor) {
-        // Navigate to doctor details
         Bundle bundle = new Bundle();
         bundle.putString("doctorId", doctor.getId());
         Navigation.findNavController(requireView())

@@ -5,42 +5,150 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#F5F5F5"
     tools:context=".ui.doctor.DoctorsListFragment">
 
-    <!-- Title -->
-    <TextView
+    <!-- Green Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:text="Trouver un médecin"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:background="#4CAF50"
+        android:padding="24dp"
+        android:elevation="4dp">
 
-    <!-- RecyclerView for doctors list -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/doctorsRecyclerView"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trouver un médecin"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recherchez par nom ou spécialité"
+            android:textSize="14sp"
+            android:textColor="#FFFFFF"
+            android:alpha="0.9"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+
+    <!-- Search and Filter Section -->
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="4dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Search by name -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Rechercher par nom"
+                app:boxBackgroundMode="outline"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:startIconDrawable="@android:drawable/ic_menu_search">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/searchNameInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Filter by specialty -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:hint="Filtrer par spécialité"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusBottomEnd="8dp">
+
+                <AutoCompleteTextView
+                    android:id="@+id/specialtyFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- Content area -->
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_doctor" />
+        android:layout_weight="1">
 
-    <!-- Progress Bar -->
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        <!-- Shimmer Loading -->
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:visibility="visible">
 
-    <!-- Empty state -->
-    <TextView
-        android:id="@+id/emptyStateText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Aucun médecin trouvé"
-        android:textSize="16sp"
-        android:visibility="gone" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_doctor_shimmer" />
+                <include layout="@layout/item_doctor_shimmer" />
+                <include layout="@layout/item_doctor_shimmer" />
+                <include layout="@layout/item_doctor_shimmer" />
+
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <!-- RecyclerView for doctors list -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/doctorsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="16dp"
+            android:clipToPadding="false"
+            android:visibility="gone"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_doctor" />
+
+        <!-- Progress Bar -->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <!-- Empty state -->
+        <TextView
+            android:id="@+id/emptyStateText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Aucun médecin trouvé"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+    </FrameLayout>
 
 </LinearLayout>
