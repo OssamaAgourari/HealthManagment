@@ -9,32 +9,37 @@
     <action
         android:id="@+id/action_global_homeFragment"
         app:destination="@id/homeFragment"
-        app:popUpTo="@id/homeFragment"
-        app:popUpToInclusive="false" />
+        app:popUpTo="@id/app_graph"
+        app:popUpToInclusive="false"
+        app:launchSingleTop="true" />
 
     <action
         android:id="@+id/action_global_doctorsListFragment"
         app:destination="@id/doctorsListFragment"
-        app:popUpTo="@id/homeFragment"
-        app:popUpToInclusive="false" />
+        app:popUpTo="@id/app_graph"
+        app:popUpToInclusive="false"
+        app:launchSingleTop="true" />
 
     <action
         android:id="@+id/action_global_myAppointmentsFragment"
         app:destination="@id/myAppointmentsFragment"
-        app:popUpTo="@id/homeFragment"
-        app:popUpToInclusive="false" />
+        app:popUpTo="@id/app_graph"
+        app:popUpToInclusive="false"
+        app:launchSingleTop="true" />
 
     <action
         android:id="@+id/action_global_profileFragment"
         app:destination="@id/profileFragment"
-        app:popUpTo="@id/homeFragment"
-        app:popUpToInclusive="false" />
+        app:popUpTo="@id/app_graph"
+        app:popUpToInclusive="false"
+        app:launchSingleTop="true" />
 
     <action
         android:id="@+id/action_global_patientFormFragment"
         app:destination="@id/patientFormFragment"
-        app:popUpTo="@id/homeFragment"
-        app:popUpToInclusive="false" />
+        app:popUpTo="@id/app_graph"
+        app:popUpToInclusive="false"
+        app:launchSingleTop="true" />
 
     <fragment
         android:id="@+id/loginFragment"
@@ -117,5 +122,13 @@
         <action
             android:id="@+id/action_doctorDetailsFragment_to_bookApointementsFragment"
             app:destination="@id/bookApointementsFragment" />
+        <action
+            android:id="@+id/action_doctorDetailsFragment_to_bookAppointmentFormFragment"
+            app:destination="@id/bookAppointmentFormFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/bookAppointmentFormFragment"
+        android:name="com.example.health.ui.appointment.BookAppointmentFormFragment"
+        android:label="Prendre rendez-vous"
+        tools:layout="@layout/fragment_book_appointment_form" />
 </navigation>

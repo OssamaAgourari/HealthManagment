@@ -4,9 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,46 +13,32 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.health.R;
+import com.example.health.databinding.FragmentDoctorDetailsBinding;
 import com.example.health.model.Doctor;
 import com.example.health.viewModels.DoctorViewModel;
 
 public class DoctorDetailsFragment extends Fragment {
 
+    private FragmentDoctorDetailsBinding binding;
     private DoctorViewModel viewModel;
-    private TextView nameText, specialtyText, ratingText, reviewsText;
-    private TextView experienceText, feeText, addressText, phoneText, descriptionText;
-    private Button bookButton;
-    private ImageButton backButton;
 
     public DoctorDetailsFragment() {
         // Required empty public constructor
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_doctor_details, container, false);
+        binding = FragmentDoctorDetailsBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // Initialize views
-        backButton = view.findViewById(R.id.backButton);
-        nameText = view.findViewById(R.id.doctorDetailName);
-        specialtyText = view.findViewById(R.id.doctorDetailSpecialty);
-        ratingText = view.findViewById(R.id.doctorDetailRating);
-        reviewsText = view.findViewById(R.id.doctorDetailReviews);
-        experienceText = view.findViewById(R.id.doctorDetailExperience);
-        feeText = view.findViewById(R.id.doctorDetailFee);
-        addressText = view.findViewById(R.id.doctorDetailAddress);
-        phoneText = view.findViewById(R.id.doctorDetailPhone);
-        descriptionText = view.findViewById(R.id.doctorDetailDescription);
-        bookButton = view.findViewById(R.id.bookAppointmentButton);
-
         // Back button
-        backButton.setOnClickListener(v -> {
+        binding.backButton.setOnClickListener(v -> {
             Navigation.findNavController(v).navigateUp();
         });
 
@@ -84,20 +67,20 @@ public class DoctorDetailsFragment extends Fragment {
             }
         });
 
-        // Book appointment button
-        bookButton.setOnClickListener(v -> {
+        // Book appointment button - Navigate to new form
+        binding.bookAppointmentButton.setOnClickListener(v -> {
             Doctor doctor = viewModel.getSelectedDoctor().getValue();
             if (doctor != null) {
-                // Prepare data to pass to booking fragment
+                // Prepare data to pass to booking form fragment
                 Bundle bundle = new Bundle();
                 bundle.putString("doctorId", doctor.getId());
                 bundle.putString("doctorName", doctor.getFullName());
                 bundle.putString("doctorSpecialty", doctor.getSpecialty());
                 bundle.putDouble("consultationFee", doctor.getConsultationFee());
 
-                // Navigate to booking fragment
+                // Navigate to new booking form fragment
                 Navigation.findNavController(v).navigate(
-                    R.id.action_doctorDetailsFragment_to_bookApointementsFragment,
+                    R.id.action_doctorDetailsFragment_to_bookAppointmentFormFragment,
                     bundle
                 );
             }
@@ -105,14 +88,20 @@ public class DoctorDetailsFragment extends Fragment {
     }
 
     private void displayDoctorInfo(Doctor doctor) {
-        nameText.setText(doctor.getFullName());
-        specialtyText.setText(doctor.getSpecialty());
-        ratingText.setText("⭐ " + String.format("%.1f", doctor.getRating()));
-        reviewsText.setText("(" + doctor.getTotalReviews() + " avis)");
-        experienceText.setText(doctor.getExperience() + " ans");
-        feeText.setText(String.format("%.0f€", doctor.getConsultationFee()));
-        addressText.setText(doctor.getAddress() + ", " + doctor.getCity());
-        phoneText.setText(doctor.getPhone());
-        descriptionText.setText(doctor.getDescription());
+        binding.doctorDetailName.setText(doctor.getFullName());
+        binding.doctorDetailSpecialty.setText(doctor.getSpecialty());
+        binding.doctorDetailRating.setText("⭐ " + String.format("%.1f", doctor.getRating()));
+        binding.doctorDetailReviews.setText("(" + doctor.getTotalReviews() + " avis)");
+        binding.doctorDetailExperience.setText(doctor.getExperience() + " ans");
+        binding.doctorDetailFee.setText(String.format("%.0f€", doctor.getConsultationFee()));
+        binding.doctorDetailAddress.setText(doctor.getAddress() + ", " + doctor.getCity());
+        binding.doctorDetailPhone.setText(doctor.getPhone());
+        binding.doctorDetailDescription.setText(doctor.getDescription());
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }
