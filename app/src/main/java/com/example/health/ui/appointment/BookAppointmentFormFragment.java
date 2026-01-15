@@ -211,16 +211,31 @@ public class BookAppointmentFormFragment extends Fragment {
     }
 
     private void displayPatientInfo(Patient patient) {
-        String fullName = "";
-        if (patient.getFirstName() != null) {
-            fullName = patient.getFirstName();
+        // Nom complet
+        String firstName = patient.getFirstName();
+        String lastName = patient.getLastName();
+        StringBuilder fullNameBuilder = new StringBuilder();
+
+        if (firstName != null && !firstName.trim().isEmpty()) {
+            fullNameBuilder.append(firstName.trim());
         }
-        if (patient.getLastName() != null) {
-            fullName += " " + patient.getLastName();
+        if (lastName != null && !lastName.trim().isEmpty()) {
+            if (fullNameBuilder.length() > 0) {
+                fullNameBuilder.append(" ");
+            }
+            fullNameBuilder.append(lastName.trim());
         }
-        binding.patientNameText.setText(fullName.trim().isEmpty() ? "Non renseigné" : fullName.trim());
-        binding.patientEmailText.setText(patient.getEmail() != null ? patient.getEmail() : "Non renseigné");
-        binding.patientPhoneText.setText(patient.getPhone() != null ? patient.getPhone() : "Non renseigné");
+
+        String fullName = fullNameBuilder.toString();
+        binding.patientNameText.setText(fullName.isEmpty() ? "Non renseigné" : fullName);
+
+        // Email
+        String email = patient.getEmail();
+        binding.patientEmailText.setText(email != null && !email.trim().isEmpty() ? email : "Non renseigné");
+
+        // Téléphone
+        String phone = patient.getPhone();
+        binding.patientPhoneText.setText(phone != null && !phone.trim().isEmpty() ? phone : "Non renseigné");
     }
 
     @Override
