@@ -1,5 +1,6 @@
 package com.example.health.ui.doctor;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,7 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -95,8 +97,11 @@ public class DoctorsListFragment extends Fragment implements DoctorAdapter.OnDoc
         });
 
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
-            if (error != null && !error.isEmpty()) {
-                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+            if (error != null && !error.isEmpty() && getView() != null) {
+                Snackbar.make(getView(), error, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.parseColor("#F44336"))
+                    .setTextColor(Color.WHITE)
+                    .show();
             }
         });
 

@@ -1,10 +1,12 @@
 package com.example.health.ui.doctor;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,7 +65,10 @@ public class DoctorDetailsFragment extends Fragment {
         // Observe errors
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
             if (error != null && !error.isEmpty()) {
-                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), error, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.parseColor("#F44336"))
+                    .setTextColor(Color.WHITE)
+                    .show();
             }
         });
 

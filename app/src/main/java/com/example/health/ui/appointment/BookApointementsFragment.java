@@ -159,15 +159,22 @@ public class BookApointementsFragment extends Fragment {
         // Observe booking success
         viewModel.getBookingSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
-                Snackbar.make(binding.getRoot(), "Rendez-vous confirmé avec succès!", Snackbar.LENGTH_LONG).show();
-                Navigation.findNavController(requireView()).navigateUp();
+                Snackbar.make(binding.getRoot(), "Rendez-vous confirme avec succes!", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(Color.parseColor("#4CAF50"))
+                    .setTextColor(Color.WHITE)
+                    .show();
+                binding.getRoot().postDelayed(() ->
+                    Navigation.findNavController(requireView()).navigateUp(), 1500);
             }
         });
 
         // Observe error messages
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
             if (error != null && !error.isEmpty()) {
-                Snackbar.make(binding.getRoot(), error, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), error, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.parseColor("#F44336"))
+                    .setTextColor(Color.WHITE)
+                    .show();
             }
         });
 

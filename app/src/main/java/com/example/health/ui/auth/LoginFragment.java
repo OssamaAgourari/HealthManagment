@@ -1,5 +1,6 @@
 package com.example.health.ui.auth;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -54,7 +55,10 @@ public class LoginFragment extends Fragment {
 
         viewModel.getErreurMessage().observe(getViewLifecycleOwner(), erreurMessage->{
             if(erreurMessage !=null && !erreurMessage.isEmpty()){
-                Snackbar.make(container, erreurMessage, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(container, erreurMessage, Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.parseColor("#F44336"))
+                    .setTextColor(Color.WHITE)
+                    .show();
             }
         });
     }

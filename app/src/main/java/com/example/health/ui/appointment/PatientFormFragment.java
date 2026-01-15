@@ -1,11 +1,13 @@
 package com.example.health.ui.appointment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -67,14 +69,16 @@ public class PatientFormFragment extends Fragment {
     private void observeViewModel() {
         viewModel.submitResult.observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
-                Toast.makeText(requireContext(),
-                        "✔ Formulaire envoyé avec succès",
-                        Toast.LENGTH_LONG).show();
+                Snackbar.make(binding.getRoot(), "Formulaire envoye avec succes", Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(Color.parseColor("#4CAF50"))
+                        .setTextColor(Color.WHITE)
+                        .show();
                 clearForm();
             } else {
-                Toast.makeText(requireContext(),
-                        "❌ Erreur lors de l’envoi",
-                        Toast.LENGTH_LONG).show();
+                Snackbar.make(binding.getRoot(), "Erreur lors de l'envoi", Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(Color.parseColor("#F44336"))
+                        .setTextColor(Color.WHITE)
+                        .show();
             }
         });
     }
@@ -87,9 +91,10 @@ public class PatientFormFragment extends Fragment {
         String type = binding.menuAuto.getText().toString().trim();
 
         if (name.isEmpty() || ageText.isEmpty() || description.isEmpty() || type.isEmpty()) {
-            Toast.makeText(requireContext(),
-                    "Veuillez remplir tous les champs",
-                    Toast.LENGTH_SHORT).show();
+            Snackbar.make(binding.getRoot(), "Veuillez remplir tous les champs", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.parseColor("#FF9800"))
+                    .setTextColor(Color.WHITE)
+                    .show();
             return;
         }
 

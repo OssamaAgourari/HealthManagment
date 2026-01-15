@@ -111,7 +111,10 @@ public class MyAppointmentsFragment extends Fragment implements AppointmentAdapt
         } else {
             View view = getView();
             if (view != null) {
-                Snackbar.make(view, "Vous devez être connecté", Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(view, "Vous devez etre connecte", Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(Color.parseColor("#FF9800"))
+                        .setTextColor(Color.WHITE)
+                        .show();
             }
         }
     }

@@ -1,11 +1,13 @@
 package com.example.health.ui.auth;
 
 import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -113,7 +115,10 @@ public class RegisterFragment extends Fragment {
                 return;
             }
             if (gender.isEmpty()) {
-                Toast.makeText(requireContext(), "Veuillez sélectionner un genre", Toast.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), "Veuillez selectionner un genre", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(Color.parseColor("#FF9800"))
+                    .setTextColor(Color.WHITE)
+                    .show();
                 return;
             }
 
@@ -149,21 +154,28 @@ public class RegisterFragment extends Fragment {
         // Observe registration success
         viewModel.getIsRegistered().observe(getViewLifecycleOwner(), isRegistered -> {
             if (isRegistered != null && isRegistered) {
-                Toast.makeText(requireContext(), "Compte créé avec succès!", Toast.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), "Compte cree avec succes!", Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(Color.parseColor("#4CAF50"))
+                    .setTextColor(Color.WHITE)
+                    .show();
 
-                // Navigate back to login screen
-                Navigation.findNavController(requireView()).popBackStack();
+                // Navigate back to login screen after delay
+                binding.getRoot().postDelayed(() ->
+                    Navigation.findNavController(requireView()).popBackStack(), 1500);
             }
         });
 
         // Observe errors
         viewModel.getErreurMessage().observe(getViewLifecycleOwner(), error -> {
             if (error != null && !error.isEmpty()) {
-                Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show();
+                Snackbar.make(binding.getRoot(), error, Snackbar.LENGTH_LONG)
+                    .setBackgroundTint(Color.parseColor("#F44336"))
+                    .setTextColor(Color.WHITE)
+                    .show();
 
                 // Re-enable button
                 binding.registerButton.setEnabled(true);
-                binding.registerButton.setText("Créer mon compte");
+                binding.registerButton.setText("Creer mon compte");
             }
         });
     }

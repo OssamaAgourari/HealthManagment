@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridLayout;
-import android.widget.Toast;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -188,7 +188,10 @@ public class BookAppointmentFormFragment extends Fragment {
         // Observe booking success
         viewModel.getBookingSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
-                Toast.makeText(requireContext(), "Rendez-vous réservé avec succès!", Toast.LENGTH_LONG).show();
+                Snackbar.make(binding.getRoot(), "Rendez-vous reserve avec succes!", Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(Color.parseColor("#4CAF50"))
+                        .setTextColor(Color.WHITE)
+                        .show();
                 // Navigate back or to appointments list
                 Navigation.findNavController(requireView()).navigate(R.id.action_global_myAppointmentsFragment);
             }
@@ -197,7 +200,10 @@ public class BookAppointmentFormFragment extends Fragment {
         // Observe error messages
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
             if (error != null && !error.isEmpty()) {
-                Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show();
+                Snackbar.make(binding.getRoot(), error, Snackbar.LENGTH_SHORT)
+                        .setBackgroundTint(Color.parseColor("#F44336"))
+                        .setTextColor(Color.WHITE)
+                        .show();
             }
         });
 
