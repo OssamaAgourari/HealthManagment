@@ -6,34 +6,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="#F5F5F5"
-    tools:context=".ui.appointment.PatientFormFragment">
+    tools:context=".ui.appointment.BookForSomeoneElseFragment">
 
     <!-- Green Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:background="#4CAF50"
-        android:padding="24dp"
+        android:padding="16dp"
+        android:gravity="center_vertical"
         android:elevation="4dp">
 
+        <ImageButton
+            android:id="@+id/backButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@android:drawable/ic_menu_revert"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="#FFFFFF"
+            android:contentDescription="Retour" />
+
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Rendez-vous pour un proche"
-            android:textSize="24sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Remplissez le formulaire ci-dessous"
-            android:textSize="14sp"
             android:textColor="#FFFFFF"
-            android:alpha="0.9"
-            android:layout_marginTop="4dp" />
-
+            android:layout_marginStart="8dp" />
     </LinearLayout>
 
     <!-- Scrollable Content -->
@@ -74,10 +76,9 @@
 
                     <!-- Name Input -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Nom du patient"
+                        android:hint="Nom complet du patient"
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusTopStart="8dp"
                         app:boxCornerRadiusTopEnd="8dp"
@@ -86,19 +87,18 @@
                         app:startIconDrawable="@drawable/person">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editName"
+                            android:id="@+id/editPatientName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Phone Input (Optional) -->
+                    <!-- Phone Input -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/phoneLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
-                        android:hint="Telephone (optionnel)"
+                        android:hint="Telephone du patient"
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusTopStart="8dp"
                         app:boxCornerRadiusTopEnd="8dp"
@@ -107,63 +107,11 @@
                         app:startIconDrawable="@android:drawable/ic_menu_call">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editPhone"
+                            android:id="@+id/editPatientPhone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="phone" />
                     </com.google.android.material.textfield.TextInputLayout>
-
-                    <!-- Age Input -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/age"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:hint="Age"
-                        app:boxBackgroundMode="outline"
-                        app:boxCornerRadiusTopStart="8dp"
-                        app:boxCornerRadiusTopEnd="8dp"
-                        app:boxCornerRadiusBottomStart="8dp"
-                        app:boxCornerRadiusBottomEnd="8dp"
-                        app:startIconDrawable="@drawable/birthday">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editAge"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="number" />
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <!-- Gender Selection -->
-                    <TextView
-                        android:id="@+id/genre"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="Genre"
-                        android:textStyle="bold"
-                        android:textColor="#666666" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="8dp">
-
-                        <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/radioMale"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Homme" />
-
-                        <com.google.android.material.radiobutton.MaterialRadioButton
-                            android:id="@+id/radioFemale"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Femme" />
-                    </LinearLayout>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -326,7 +274,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Symptoms Card -->
+            <!-- Reason Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -343,18 +291,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Details de la consultation"
+                        android:text="Motif de consultation"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#4CAF50"
-                        android:layout_marginBottom="16dp" />
+                        android:layout_marginBottom="12dp" />
 
-                    <!-- Description Input -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/descriptionInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Description des symptomes"
+                        android:hint="Decrivez brievement la raison de la visite"
                         app:boxBackgroundMode="outline"
                         app:boxCornerRadiusTopStart="8dp"
                         app:boxCornerRadiusTopEnd="8dp"
@@ -362,93 +308,27 @@
                         app:boxCornerRadiusBottomEnd="8dp">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editDescription"
+                            android:id="@+id/reasonEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textMultiLine"
-                            android:minLines="3"
+                            android:minLines="2"
                             android:gravity="top" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Medical History Card -->
-            <androidx.cardview.widget.CardView
+            <!-- Confirm Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/confirmBookingButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp"
-                android:layout_marginBottom="16dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:id="@+id/ante_med"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Antecedents medicaux"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#4CAF50"
-                        android:layout_marginBottom="12dp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.checkbox.MaterialCheckBox
-                            android:id="@+id/diabete"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Diabete" />
-
-                        <com.google.android.material.checkbox.MaterialCheckBox
-                            android:id="@+id/hypertension"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Hypertension" />
-                    </LinearLayout>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Action Buttons -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp">
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/fermer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="8dp"
-                    android:text="Fermer"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    app:cornerRadius="8dp" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/envoyer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text="Confirmer"
-                    android:backgroundTint="#4CAF50"
-                    app:cornerRadius="8dp" />
-
-            </LinearLayout>
+                android:layout_height="56dp"
+                android:text="Confirmer le rendez-vous"
+                android:textSize="16sp"
+                android:backgroundTint="#4CAF50"
+                app:cornerRadius="8dp"
+                android:layout_marginBottom="16dp" />
 
             <ProgressBar
                 android:id="@+id/progressBar"

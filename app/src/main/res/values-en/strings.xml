@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Health</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Home Screen -->
+    <string name="welcome">Welcome</string>
+    <string name="user_default">User</string>
+    <string name="health_tip_title">Health tip of the day</string>
+    <string name="next_appointment">Next Appointment</string>
+    <string name="no_upcoming_appointments">You have no upcoming appointments</string>
+    <string name="book_appointment">Book an appointment</string>
+    <string name="view_details">View details</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="today">Today</string>
+    <string name="at_time">at</string>
+
+    <!-- Book Appointment Choice -->
+    <string name="book_appointment_title">Book an Appointment</string>
+    <string name="book_for_me">Book appointment for me</string>
+    <string name="book_for_someone_else">Book appointment for someone else</string>
+    <string name="book_for_me_desc">Schedule a consultation for yourself</string>
+    <string name="book_for_someone_else_desc">Schedule a consultation for a family member</string>
+
+    <!-- Language -->
+    <string name="language">Language</string>
+    <string name="french">Français</string>
+    <string name="english">English</string>
+
+    <!-- Health Tips -->
+    <string-array name="health_tips">
+        <item>Drink at least 8 glasses of water a day to stay hydrated.</item>
+        <item>Get 30 minutes of physical exercise every day.</item>
+        <item>Sleep 7 to 8 hours per night for good recovery.</item>
+        <item>Eat 5 servings of fruits and vegetables daily.</item>
+        <item>Avoid smoking and limit alcohol consumption.</item>
+        <item>Wash your hands regularly to prevent infections.</item>
+        <item>Take regular breaks if you work on a screen.</item>
+        <item>Maintain a healthy weight through balanced nutrition.</item>
+        <item>See your doctor for regular health checkups.</item>
+        <item>Manage stress through meditation or relaxing activities.</item>
+        <item>Limit your intake of salt and sugar.</item>
+        <item>Protect your skin from the sun with sunscreen.</item>
+    </string-array>
+
+    <!-- Types de consultation -->
+    <string-array name="specialites">
+        <item>General Practitioner</item>
+        <item>Cardiology</item>
+        <item>Dermatology</item>
+        <item>Pediatrics</item>
+        <item>Gynecology</item>
+        <item>Neurology</item>
+    </string-array>
+
+    <!-- Common -->
+    <string name="back">Back</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="error">Error</string>
+    <string name="success">Success</string>
+    <string name="loading">Loading</string>
+
+    <!-- Menu -->
+    <string name="menu_home">Home</string>
+    <string name="menu_doctors">Doctors</string>
+    <string name="menu_appointments">Appointments</string>
+    <string name="menu_book">Book</string>
+    <string name="menu_profile">Profile</string>
+</resources>
+

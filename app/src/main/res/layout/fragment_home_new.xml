@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vm"
+            type="com.example.health.viewModels.HomeViewModel" />
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:background="#F5F5F5"
+        tools:context=".ui.home.HomeFragment">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Header Section with Welcome -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="#4CAF50"
+                android:padding="24dp"
+                android:elevation="4dp">
+
+                <!-- Language Selector -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="end"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:id="@+id/langFrench"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="FR"
+                        android:textSize="14sp"
+                        android:textColor="#FFFFFF"
+                        android:padding="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="|"
+                        android:textColor="#FFFFFF"
+                        android:layout_gravity="center_vertical" />
+
+                    <TextView
+                        android:id="@+id/langEnglish"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="EN"
+                        android:textSize="14sp"
+                        android:textColor="#FFFFFF"
+                        android:alpha="0.7"
+                        android:padding="8dp"
+                        android:background="?attr/selectableItemBackgroundBorderless" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/welcome"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:alpha="0.9" />
+
+                <TextView
+                    android:id="@+id/welcomeUserText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{vm.userName}"
+                    android:textSize="28sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="4dp"
+                    tools:text="John Doe" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Health Tip Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    app:cardBackgroundColor="#E8F5E9">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/medical_services"
+                            app:tint="#2E7D32"
+                            android:layout_marginEnd="12dp"
+                            android:contentDescription="@string/health_tip_title" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/health_tip_title"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="#2E7D32" />
+
+                            <TextView
+                                android:id="@+id/healthTipText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{vm.healthTip}"
+                                android:textSize="14sp"
+                                android:textColor="#333333"
+                                android:layout_marginTop="8dp"
+                                android:lineSpacingExtra="4dp"
+                                tools:text="Buvez au moins 8 verres d eau par jour pour rester hydrate." />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Next Appointment Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/next_appointment"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:textColor="#333333"
+                            android:layout_marginBottom="12dp" />
+
+                        <!-- Appointment Exists -->
+                        <LinearLayout
+                            android:id="@+id/appointmentExistsLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone"
+                            tools:visibility="visible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:gravity="center_vertical">
+
+                                <!-- Doctor Icon -->
+                                <ImageView
+                                    android:layout_width="50dp"
+                                    android:layout_height="50dp"
+                                    android:src="@drawable/doctors"
+                                    app:tint="#4CAF50"
+                                    android:padding="8dp"
+                                    android:background="@drawable/circle_background"
+                                    android:layout_marginEnd="12dp"
+                                    android:contentDescription="@string/menu_doctors" />
+
+                                <LinearLayout
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/appointmentDoctorName"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{vm.nextAppointmentDoctorName}"
+                                        android:textSize="16sp"
+                                        android:textStyle="bold"
+                                        android:textColor="#333333"
+                                        tools:text="Dr. Ahmed Ben Ali" />
+
+                                    <TextView
+                                        android:id="@+id/appointmentSpecialty"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{vm.nextAppointmentSpecialty}"
+                                        android:textSize="14sp"
+                                        android:textColor="#666666"
+                                        tools:text="Cardiologue" />
+
+                                    <TextView
+                                        android:id="@+id/appointmentDateTime"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{vm.nextAppointmentDateTime}"
+                                        android:textSize="14sp"
+                                        android:textColor="#4CAF50"
+                                        android:textStyle="bold"
+                                        android:layout_marginTop="4dp"
+                                        tools:text="Demain - 10:30" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/viewDetailsButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/view_details"
+                                android:layout_marginTop="12dp"
+                                app:cornerRadius="8dp"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                app:strokeColor="#4CAF50"
+                                android:textColor="#4CAF50" />
+                        </LinearLayout>
+
+                        <!-- No Appointment -->
+                        <LinearLayout
+                            android:id="@+id/noAppointmentLayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:padding="16dp"
+                            android:visibility="visible">
+
+                            <ImageView
+                                android:layout_width="60dp"
+                                android:layout_height="60dp"
+                                android:src="@drawable/calendar"
+                                app:tint="#9E9E9E"
+                                android:layout_marginBottom="8dp"
+                                android:contentDescription="@string/menu_appointments" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/no_upcoming_appointments"
+                                android:textSize="14sp"
+                                android:textColor="#666666"
+                                android:textAlignment="center"
+                                android:layout_marginBottom="12dp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/bookAppointmentButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/book_appointment"
+                                app:cornerRadius="8dp"
+                                app:backgroundTint="#4CAF50" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <!-- Quick Book Appointment Card -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/quickBookCard"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="16dp"
+                        android:gravity="center_vertical"
+                        android:background="#E3F2FD">
+
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/appointements"
+                            app:tint="#1976D2"
+                            android:layout_marginEnd="16dp"
+                            android:contentDescription="@string/book_appointment" />
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/book_appointment"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="#1976D2" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/book_for_me_desc"
+                                android:textSize="12sp"
+                                android:textColor="#666666"
+                                android:layout_marginTop="2dp" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_media_play"
+                            app:tint="#1976D2"
+                            android:contentDescription="@string/book_appointment" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>
+

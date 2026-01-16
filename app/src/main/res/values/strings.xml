@@ -1,15 +1,69 @@
 <resources>
     <string name="app_name">Health</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Home Screen -->
+    <string name="welcome">Bienvenue</string>
+    <string name="user_default">Utilisateur</string>
+    <string name="health_tip_title">Conseil sante du jour</string>
+    <string name="next_appointment">Prochain rendez-vous</string>
+    <string name="no_upcoming_appointments">Vous n\'avez pas de rendez-vous a venir</string>
+    <string name="book_appointment">Prendre un rendez-vous</string>
+    <string name="view_details">Voir details</string>
+    <string name="tomorrow">Demain</string>
+    <string name="today">Aujourd\'hui</string>
+    <string name="at_time">a</string>
+
+    <!-- Book Appointment Choice -->
+    <string name="book_appointment_title">Prendre un rendez-vous</string>
+    <string name="book_for_me">Prendre rendez-vous pour moi</string>
+    <string name="book_for_someone_else">Prendre rendez-vous pour quelqu\'un d\'autre</string>
+    <string name="book_for_me_desc">Reservez une consultation pour vous-meme</string>
+    <string name="book_for_someone_else_desc">Reservez une consultation pour un proche</string>
+
+    <!-- Language -->
+    <string name="language">Langue</string>
+    <string name="french">Francais</string>
+    <string name="english">English</string>
+
+    <!-- Health Tips -->
+    <string-array name="health_tips">
+        <item>Buvez au moins 8 verres d\'eau par jour pour rester hydrate.</item>
+        <item>Faites 30 minutes d\'exercice physique chaque jour.</item>
+        <item>Dormez 7 a 8 heures par nuit pour une bonne recuperation.</item>
+        <item>Mangez 5 fruits et legumes par jour.</item>
+        <item>Evitez de fumer et limitez la consommation d\'alcool.</item>
+        <item>Lavez-vous les mains regulierement pour prevenir les infections.</item>
+        <item>Faites des pauses regulieres si vous travaillez sur un ecran.</item>
+        <item>Maintenez un poids sante grace a une alimentation equilibree.</item>
+        <item>Consultez votre medecin pour des bilans de sante reguliers.</item>
+        <item>Gerez votre stress par la meditation ou des activites relaxantes.</item>
+        <item>Limitez votre consommation de sel et de sucre.</item>
+        <item>Protegez votre peau du soleil avec une creme solaire.</item>
+    </string-array>
 
     <!-- Types de consultation -->
     <string-array name="specialites">
-        <item>Généraliste</item>
+        <item>Generaliste</item>
         <item>Cardiologie</item>
         <item>Dermatologie</item>
-        <item>Pédiatrie</item>
-        <item>Gynécologie</item>
+        <item>Pediatrie</item>
+        <item>Gynecologie</item>
         <item>Neurologie</item>
     </string-array>
+
+    <!-- Common -->
+    <string name="back">Retour</string>
+    <string name="confirm">Confirmer</string>
+    <string name="cancel">Annuler</string>
+    <string name="error">Erreur</string>
+    <string name="success">Succes</string>
+    <string name="loading">Chargement</string>
+
+    <!-- Menu -->
+    <string name="menu_home">Accueil</string>
+    <string name="menu_doctors">Medecins</string>
+    <string name="menu_appointments">Rendez-vous</string>
+    <string name="menu_book">Reserver</string>
+    <string name="menu_profile">Profil</string>
 </resources>

@@ -10,20 +10,28 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Set;
+
 public class BookAppointmentViewModel extends ViewModel {
 
     private final AppointmentRepository appointmentRepository;
     private final FirebaseFirestore firestore;
     private final FirebaseAuth auth;
 
-    private MutableLiveData<Patient> currentPatient = new MutableLiveData<>();
-    private MutableLiveData<Boolean> bookingSuccess = new MutableLiveData<>();
-    private MutableLiveData<String> errorMessage = new MutableLiveData<>();
-    private MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
+    private final MutableLiveData<Patient> currentPatient = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> bookingSuccess = new MutableLiveData<>();
+    private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
     // Selected date and time
-    private MutableLiveData<String> selectedDate = new MutableLiveData<>("");
-    private MutableLiveData<String> selectedTime = new MutableLiveData<>("");
+    private final MutableLiveData<String> selectedDate = new MutableLiveData<>("");
+    private final MutableLiveData<String> selectedTime = new MutableLiveData<>("");
+
+    // Booked time slots for current doctor and date
+    private final MutableLiveData<Set<String>> bookedTimeSlots = new MutableLiveData<>();
+
+    // Current doctor ID
+    private String currentDoctorId;
 
     public BookAppointmentViewModel() {
         appointmentRepository = new AppointmentRepository();
@@ -31,22 +39,35 @@ public class BookAppointmentViewModel extends ViewModel {
         auth = FirebaseAuth.getInstance();
     }
 
+    // Set the current doctor ID
+    public void setDoctorId(String doctorId) {
+        this.currentDoctorId = doctorId;
+    }
+
+    // Load booked time slots for a specific date
+    public void loadBookedTimeSlots(String date) {
+        if (currentDoctorId == null || currentDoctorId.isEmpty()) {
+            return;
+        }
+        appointmentRepository.getBookedTimeSlots(currentDoctorId, date, bookedTimeSlots, errorMessage);
+    }
+
     // Load current patient info from Firestore
     public void loadCurrentPatientInfo() {
         FirebaseUser user = auth.getCurrentUser();
         if (user == null) {
-            errorMessage.setValue("Utilisateur non connecté");
+            errorMessage.setValue("Utilisateur non connecte");
             return;
         }
 
         isLoading.setValue(true);
-        // Les utilisateurs sont stockés dans la collection "users"
+        // Les utilisateurs sont stockes dans la collection "users"
         firestore.collection("users")
                 .document(user.getUid())
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
-                        // Mapper manuellement les données car la structure peut différer
+                        // Mapper manuellement les donnees car la structure peut differer
                         Patient patient = new Patient();
                         patient.setUid(user.getUid());
                         patient.setFirstName(documentSnapshot.getString("firstName"));
@@ -58,7 +79,7 @@ public class BookAppointmentViewModel extends ViewModel {
 
                         currentPatient.setValue(patient);
                     } else {
-                        // Si le document n'existe pas, créer depuis les infos Firebase Auth
+                        // Si le document n'existe pas, creer depuis les infos Firebase Auth
                         Patient patient = new Patient();
                         patient.setUid(user.getUid());
                         patient.setEmail(user.getEmail());
@@ -80,7 +101,7 @@ public class BookAppointmentViewModel extends ViewModel {
                 });
     }
 
-    // Book appointment
+    // Book appointment with slot check
     public void bookAppointment(String doctorId, String doctorName, String specialty,
                                 double consultationFee, String reason) {
         Patient patient = currentPatient.getValue();
@@ -93,12 +114,12 @@ public class BookAppointmentViewModel extends ViewModel {
         String time = selectedTime.getValue();
 
         if (date == null || date.isEmpty()) {
-            errorMessage.setValue("Veuillez sélectionner une date");
+            errorMessage.setValue("Veuillez selectionner une date");
             return;
         }
 
         if (time == null || time.isEmpty()) {
-            errorMessage.setValue("Veuillez sélectionner une heure");
+            errorMessage.setValue("Veuillez selectionner une heure");
             return;
         }
 
@@ -107,7 +128,16 @@ public class BookAppointmentViewModel extends ViewModel {
         // Create appointment
         Appointment appointment = new Appointment();
         appointment.setPatientId(patient.getUid());
-        appointment.setPatientName(patient.getFirstName() + " " + patient.getLastName());
+
+        String patientName = "";
+        if (patient.getFirstName() != null) {
+            patientName = patient.getFirstName();
+        }
+        if (patient.getLastName() != null) {
+            patientName += " " + patient.getLastName();
+        }
+        appointment.setPatientName(patientName.trim());
+
         appointment.setDoctorId(doctorId);
         appointment.setDoctorName(doctorName);
         appointment.setSpecialty(specialty);
@@ -117,13 +147,20 @@ public class BookAppointmentViewModel extends ViewModel {
         appointment.setConsultationFee(consultationFee);
         appointment.setStatus("pending");
 
-        appointmentRepository.createAppointment(appointment, bookingSuccess, errorMessage);
-        isLoading.setValue(false);
+        // Use the new method that checks slot availability
+        appointmentRepository.createAppointmentWithCheck(appointment, bookingSuccess, errorMessage);
+
+        // Observe the result to update loading state
+        // Note: isLoading will be set to false when success or error is received
     }
 
-    // Set selected date
+    // Set selected date and load booked slots
     public void setSelectedDate(String date) {
         selectedDate.setValue(date);
+        // Reset selected time when date changes
+        selectedTime.setValue("");
+        // Load booked slots for this date
+        loadBookedTimeSlots(date);
     }
 
     // Set selected time
@@ -154,6 +191,10 @@ public class BookAppointmentViewModel extends ViewModel {
 
     public MutableLiveData<String> getSelectedTime() {
         return selectedTime;
+    }
+
+    public MutableLiveData<Set<String>> getBookedTimeSlots() {
+        return bookedTimeSlots;
     }
 }
 

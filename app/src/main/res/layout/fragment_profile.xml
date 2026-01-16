@@ -36,7 +36,7 @@
                 android:id="@+id/profileName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nom d'utilisateur"
+                android:text="Nom utilisateur"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="#FFFFFF" />
@@ -83,12 +83,13 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="👤"
-                        android:textSize="24sp"
-                        android:layout_marginEnd="16dp" />
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/person"
+                        app:tint="#4CAF50"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="User" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -107,7 +108,7 @@
                             android:id="@+id/profileFullName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Prénom Nom"
+                            android:text="Prenom Nom"
                             android:textSize="16sp"
                             android:textColor="#333333"
                             android:layout_marginTop="4dp" />
@@ -130,12 +131,13 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📱"
-                        android:textSize="24sp"
-                        android:layout_marginEnd="16dp" />
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@android:drawable/ic_menu_call"
+                        app:tint="#4CAF50"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="Phone" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -146,7 +148,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Téléphone"
+                            android:text="Telephone"
                             android:textSize="12sp"
                             android:textColor="#666666" />
 
@@ -154,7 +156,7 @@
                             android:id="@+id/profilePhone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Non renseigné"
+                            android:text="Non renseigne"
                             android:textSize="16sp"
                             android:textColor="#333333"
                             android:layout_marginTop="4dp" />
@@ -177,12 +179,13 @@
                     android:padding="16dp"
                     android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="📅"
-                        android:textSize="24sp"
-                        android:layout_marginEnd="16dp" />
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:src="@drawable/calendar"
+                        app:tint="#4CAF50"
+                        android:layout_marginEnd="16dp"
+                        android:contentDescription="Calendar" />
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -214,7 +217,7 @@
                 android:id="@+id/logoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
-                android:text="Se déconnecter"
+                android:text="Se deconnecter"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:backgroundTint="#F44336"
@@ -224,3 +227,4 @@
 
     </LinearLayout>
 </ScrollView>
+

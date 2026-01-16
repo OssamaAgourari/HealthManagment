@@ -21,8 +21,11 @@ import com.example.health.model.Patient;
 import com.example.health.viewModels.BookAppointmentViewModel;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class BookAppointmentFormFragment extends Fragment {
 
@@ -37,6 +40,9 @@ public class BookAppointmentFormFragment extends Fragment {
 
     // Selected time button reference
     private Button selectedTimeButton = null;
+
+    // List of time slot buttons for updating availability
+    private List<Button> timeSlotButtons = new ArrayList<>();
 
     // Available time slots
     private final String[] timeSlots = {
@@ -69,6 +75,9 @@ public class BookAppointmentFormFragment extends Fragment {
             doctorName = getArguments().getString("doctorName");
             doctorSpecialty = getArguments().getString("doctorSpecialty");
             consultationFee = getArguments().getDouble("consultationFee", 0);
+
+            // Set doctor ID in ViewModel
+            viewModel.setDoctorId(doctorId);
         }
 
         // Setup UI
@@ -85,7 +94,7 @@ public class BookAppointmentFormFragment extends Fragment {
     private void setupDoctorInfo() {
         binding.doctorNameText.setText(doctorName);
         binding.doctorSpecialtyText.setText(doctorSpecialty);
-        binding.consultationFeeText.setText(String.format(Locale.getDefault(), "Tarif: %.0f€", consultationFee));
+        binding.consultationFeeText.setText(String.format(Locale.getDefault(), "Tarif: %.0f", consultationFee));
     }
 
     private void setupCalendar() {
@@ -99,6 +108,13 @@ public class BookAppointmentFormFragment extends Fragment {
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             String formattedDate = dateFormat.format(selectedCalendar.getTime());
 
+            // Reset selected time button
+            if (selectedTimeButton != null) {
+                selectedTimeButton.setBackgroundColor(Color.parseColor("#E0E0E0"));
+                selectedTimeButton.setTextColor(Color.parseColor("#333333"));
+                selectedTimeButton = null;
+            }
+
             viewModel.setSelectedDate(formattedDate);
             updateSelectedDateTimeText();
         });
@@ -106,12 +122,14 @@ public class BookAppointmentFormFragment extends Fragment {
 
     private void setupTimeSlots() {
         binding.timeSlotsGrid.removeAllViews();
+        timeSlotButtons.clear();
 
         for (String time : timeSlots) {
             Button timeButton = new Button(requireContext());
             timeButton.setText(time);
             timeButton.setTextSize(14);
             timeButton.setAllCaps(false);
+            timeButton.setTag(time); // Store time as tag for identification
 
             GridLayout.LayoutParams params = new GridLayout.LayoutParams();
             params.width = 0;
@@ -120,11 +138,17 @@ public class BookAppointmentFormFragment extends Fragment {
             params.setMargins(8, 8, 8, 8);
             timeButton.setLayoutParams(params);
 
-            // Default style
+            // Default style - available
             timeButton.setBackgroundColor(Color.parseColor("#E0E0E0"));
             timeButton.setTextColor(Color.parseColor("#333333"));
+            timeButton.setEnabled(true);
 
             timeButton.setOnClickListener(v -> {
+                if (!timeButton.isEnabled()) {
+                    Snackbar.make(binding.getRoot(), "Ce creneau est deja reserve", Snackbar.LENGTH_SHORT).show();
+                    return;
+                }
+
                 // Deselect previous button
                 if (selectedTimeButton != null) {
                     selectedTimeButton.setBackgroundColor(Color.parseColor("#E0E0E0"));
@@ -140,7 +164,34 @@ public class BookAppointmentFormFragment extends Fragment {
                 updateSelectedDateTimeText();
             });
 
+            timeSlotButtons.add(timeButton);
             binding.timeSlotsGrid.addView(timeButton);
+        }
+    }
+
+    private void updateTimeSlotsAvailability(Set<String> bookedSlots) {
+        for (Button button : timeSlotButtons) {
+            String time = (String) button.getTag();
+            if (bookedSlots != null && bookedSlots.contains(time)) {
+                // Slot is booked - disable and style as unavailable
+                button.setEnabled(false);
+                button.setBackgroundColor(Color.parseColor("#FFCDD2")); // Light red
+                button.setTextColor(Color.parseColor("#B71C1C")); // Dark red
+                button.setAlpha(0.6f);
+            } else {
+                // Slot is available
+                button.setEnabled(true);
+                button.setAlpha(1.0f);
+
+                // Check if this is the currently selected button
+                if (button == selectedTimeButton) {
+                    button.setBackgroundColor(Color.parseColor("#4CAF50"));
+                    button.setTextColor(Color.WHITE);
+                } else {
+                    button.setBackgroundColor(Color.parseColor("#E0E0E0"));
+                    button.setTextColor(Color.parseColor("#333333"));
+                }
+            }
         }
     }
 
@@ -158,7 +209,7 @@ public class BookAppointmentFormFragment extends Fragment {
         }
 
         if (text.length() == 0) {
-            text.append("Sélectionnez une date et une heure");
+            text.append("Selectionnez une date et une heure");
         }
 
         binding.selectedDateTimeText.setText(text.toString());
@@ -166,9 +217,9 @@ public class BookAppointmentFormFragment extends Fragment {
 
     private void setupClickListeners() {
         // Back button
-        binding.backButton.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigateUp();
-        });
+        binding.backButton.setOnClickListener(v ->
+                Navigation.findNavController(v).navigateUp()
+        );
 
         // Confirm booking button
         binding.confirmBookingButton.setOnClickListener(v -> {
@@ -185,14 +236,23 @@ public class BookAppointmentFormFragment extends Fragment {
             }
         });
 
+        // Observe booked time slots
+        viewModel.getBookedTimeSlots().observe(getViewLifecycleOwner(), bookedSlots -> {
+            if (bookedSlots != null) {
+                updateTimeSlotsAvailability(bookedSlots);
+            }
+        });
+
         // Observe booking success
         viewModel.getBookingSuccess().observe(getViewLifecycleOwner(), success -> {
             if (success != null && success) {
+                binding.progressBar.setVisibility(View.GONE);
+                binding.confirmBookingButton.setEnabled(true);
                 Snackbar.make(binding.getRoot(), "Rendez-vous reserve avec succes!", Snackbar.LENGTH_LONG)
                         .setBackgroundTint(Color.parseColor("#4CAF50"))
                         .setTextColor(Color.WHITE)
                         .show();
-                // Navigate back or to appointments list
+                // Navigate to appointments list
                 Navigation.findNavController(requireView()).navigate(R.id.action_global_myAppointmentsFragment);
             }
         });
@@ -200,7 +260,9 @@ public class BookAppointmentFormFragment extends Fragment {
         // Observe error messages
         viewModel.getErrorMessage().observe(getViewLifecycleOwner(), error -> {
             if (error != null && !error.isEmpty()) {
-                Snackbar.make(binding.getRoot(), error, Snackbar.LENGTH_SHORT)
+                binding.progressBar.setVisibility(View.GONE);
+                binding.confirmBookingButton.setEnabled(true);
+                Snackbar.make(binding.getRoot(), error, Snackbar.LENGTH_LONG)
                         .setBackgroundTint(Color.parseColor("#F44336"))
                         .setTextColor(Color.WHITE)
                         .show();
@@ -233,15 +295,15 @@ public class BookAppointmentFormFragment extends Fragment {
         }
 
         String fullName = fullNameBuilder.toString();
-        binding.patientNameText.setText(fullName.isEmpty() ? "Non renseigné" : fullName);
+        binding.patientNameText.setText(fullName.isEmpty() ? "Non renseigne" : fullName);
 
         // Email
         String email = patient.getEmail();
-        binding.patientEmailText.setText(email != null && !email.trim().isEmpty() ? email : "Non renseigné");
+        binding.patientEmailText.setText(email != null && !email.trim().isEmpty() ? email : "Non renseigne");
 
-        // Téléphone
+        // Telephone
         String phone = patient.getPhone();
-        binding.patientPhoneText.setText(phone != null && !phone.trim().isEmpty() ? phone : "Non renseigné");
+        binding.patientPhoneText.setText(phone != null && !phone.trim().isEmpty() ? phone : "Non renseigne");
     }
 
     @Override
@@ -250,4 +312,5 @@ public class BookAppointmentFormFragment extends Fragment {
         binding = null;
     }
 }
+
 
