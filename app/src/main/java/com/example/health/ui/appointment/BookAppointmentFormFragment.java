@@ -17,7 +17,9 @@ import androidx.navigation.Navigation;
 
 import com.example.health.R;
 import com.example.health.databinding.FragmentBookAppointmentFormBinding;
+import com.example.health.model.Appointment;
 import com.example.health.model.Patient;
+import com.example.health.utils.NotificationScheduler;
 import com.example.health.viewModels.BookAppointmentViewModel;
 
 import java.text.SimpleDateFormat;
@@ -240,6 +242,14 @@ public class BookAppointmentFormFragment extends Fragment {
         viewModel.getBookedTimeSlots().observe(getViewLifecycleOwner(), bookedSlots -> {
             if (bookedSlots != null) {
                 updateTimeSlotsAvailability(bookedSlots);
+            }
+        });
+
+        // Observe created appointment to schedule notifications
+        viewModel.getCreatedAppointment().observe(getViewLifecycleOwner(), appointment -> {
+            if (appointment != null) {
+                // Schedule notification reminders for this appointment
+                NotificationScheduler.scheduleAppointmentReminders(requireContext(), appointment);
             }
         });
 

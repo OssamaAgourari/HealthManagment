@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.health.R;
 import com.example.health.adapters.AppointmentAdapter;
 import com.example.health.model.Appointment;
+import com.example.health.utils.NotificationScheduler;
 import com.example.health.viewModels.AppointmentViewModel;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -146,6 +147,8 @@ public class MyAppointmentsFragment extends Fragment implements AppointmentAdapt
                 appointment.getDoctorName() + " le " + appointment.getDate() +
                 " à " + appointment.getTime() + "?")
             .setPositiveButton("Oui, annuler", (dialog, which) -> {
+                // Cancel scheduled notifications for this appointment
+                NotificationScheduler.cancelAppointmentReminders(requireContext(), appointment.getId());
                 viewModel.cancelAppointment(appointment.getId());
             })
             .setNegativeButton("Non", null)

@@ -81,6 +81,14 @@ public class AppointmentRepository {
     public void createAppointmentWithCheck(Appointment appointment,
                                            MutableLiveData<Boolean> successLiveData,
                                            MutableLiveData<String> errorLiveData) {
+        createAppointmentWithCheck(appointment, successLiveData, errorLiveData, null);
+    }
+
+    // Create a new appointment with slot verification and return the created appointment
+    public void createAppointmentWithCheck(Appointment appointment,
+                                           MutableLiveData<Boolean> successLiveData,
+                                           MutableLiveData<String> errorLiveData,
+                                           MutableLiveData<Appointment> createdAppointmentLiveData) {
 
         // First check if the slot is available
         firestore.collection(COLLECTION)
@@ -104,7 +112,7 @@ public class AppointmentRepository {
                         successLiveData.setValue(false);
                     } else {
                         // Slot is available, create the appointment
-                        createAppointment(appointment, successLiveData, errorLiveData);
+                        createAppointment(appointment, successLiveData, errorLiveData, createdAppointmentLiveData);
                     }
                 })
                 .addOnFailureListener(e -> {
@@ -117,6 +125,14 @@ public class AppointmentRepository {
     public void createAppointment(Appointment appointment,
                                   MutableLiveData<Boolean> successLiveData,
                                   MutableLiveData<String> errorLiveData) {
+        createAppointment(appointment, successLiveData, errorLiveData, null);
+    }
+
+    // Create a new appointment with callback to get the created appointment
+    public void createAppointment(Appointment appointment,
+                                  MutableLiveData<Boolean> successLiveData,
+                                  MutableLiveData<String> errorLiveData,
+                                  MutableLiveData<Appointment> createdAppointmentLiveData) {
 
         Map<String, Object> appointmentData = new HashMap<>();
         appointmentData.put("patientId", appointment.getPatientId());
@@ -136,6 +152,10 @@ public class AppointmentRepository {
                 .add(appointmentData)
                 .addOnSuccessListener(documentReference -> {
                     Log.d(TAG, "Appointment created: " + documentReference.getId());
+                    appointment.setId(documentReference.getId());
+                    if (createdAppointmentLiveData != null) {
+                        createdAppointmentLiveData.setValue(appointment);
+                    }
                     successLiveData.setValue(true);
                 })
                 .addOnFailureListener(e -> {

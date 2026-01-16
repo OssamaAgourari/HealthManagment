@@ -14,43 +14,61 @@
         android:orientation="vertical">
 
         <!-- Header -->
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="#4CAF50"
             android:padding="24dp"
-            android:gravity="center"
             android:elevation="4dp">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profileImage"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/profile"
-                android:scaleType="centerCrop"
-                app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                android:layout_marginBottom="16dp" />
+            <!-- Edit Button -->
+            <ImageButton
+                android:id="@+id/editProfileButton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:src="@android:drawable/ic_menu_edit"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Modifier le profil"
+                app:tint="#FFFFFF" />
 
-            <TextView
-                android:id="@+id/profileName"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nom utilisateur"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:orientation="vertical"
+                android:gravity="center">
 
-            <TextView
-                android:id="@+id/profileEmail"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="email@example.com"
-                android:textSize="14sp"
-                android:textColor="#FFFFFF"
-                android:alpha="0.9"
-                android:layout_marginTop="4dp" />
-        </LinearLayout>
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/profileImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:src="@drawable/profile"
+                    android:scaleType="centerCrop"
+                    app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                    android:layout_marginBottom="16dp" />
+
+                <TextView
+                    android:id="@+id/profileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nom utilisateur"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF" />
+
+                <TextView
+                    android:id="@+id/profileEmail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="email@example.com"
+                    android:textSize="14sp"
+                    android:textColor="#FFFFFF"
+                    android:alpha="0.9"
+                    android:layout_marginTop="4dp" />
+
+            </LinearLayout>
+        </RelativeLayout>
 
         <!-- Profile Info Section -->
         <LinearLayout

@@ -48,6 +48,18 @@ public class ProfileFragment extends Fragment {
 
         // Logout button
         binding.logoutButton.setOnClickListener(v -> showLogoutDialog());
+
+        // Edit profile button
+        binding.editProfileButton.setOnClickListener(v ->
+            Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_to_editProfileFragment)
+        );
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Reload profile data when returning from edit screen
+        viewModel.loadProfileData();
     }
 
     private void observeViewModel() {

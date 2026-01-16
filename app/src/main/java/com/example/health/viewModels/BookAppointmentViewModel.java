@@ -20,6 +20,7 @@ public class BookAppointmentViewModel extends ViewModel {
 
     private final MutableLiveData<Patient> currentPatient = new MutableLiveData<>();
     private final MutableLiveData<Boolean> bookingSuccess = new MutableLiveData<>();
+    private final MutableLiveData<Appointment> createdAppointment = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>(false);
 
@@ -147,8 +148,8 @@ public class BookAppointmentViewModel extends ViewModel {
         appointment.setConsultationFee(consultationFee);
         appointment.setStatus("pending");
 
-        // Use the new method that checks slot availability
-        appointmentRepository.createAppointmentWithCheck(appointment, bookingSuccess, errorMessage);
+        // Use the new method that checks slot availability and returns the created appointment
+        appointmentRepository.createAppointmentWithCheck(appointment, bookingSuccess, errorMessage, createdAppointment);
 
         // Observe the result to update loading state
         // Note: isLoading will be set to false when success or error is received
@@ -175,6 +176,10 @@ public class BookAppointmentViewModel extends ViewModel {
 
     public MutableLiveData<Boolean> getBookingSuccess() {
         return bookingSuccess;
+    }
+
+    public MutableLiveData<Appointment> getCreatedAppointment() {
+        return createdAppointment;
     }
 
     public MutableLiveData<String> getErrorMessage() {
