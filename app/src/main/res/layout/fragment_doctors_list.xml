@@ -5,32 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#F5F5F5"
+    android:background="?attr/colorSurface"
     tools:context=".ui.doctor.DoctorsListFragment">
 
-    <!-- Green Header -->
+    <!-- Header -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="#4CAF50"
+        android:background="?attr/colorPrimary"
         android:padding="24dp"
         android:elevation="4dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Trouver un médecin"
+            android:text="Trouver un medecin"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF" />
+            android:textColor="?attr/colorOnPrimary" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Recherchez par nom ou spécialité"
+            android:text="Recherchez par nom ou specialite"
             android:textSize="14sp"
-            android:textColor="#FFFFFF"
+            android:textColor="?attr/colorOnPrimary"
             android:alpha="0.9"
             android:layout_marginTop="4dp" />
 
@@ -145,8 +145,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Aucun médecin trouvé"
+            android:text="Aucun medecin trouve"
             android:textSize="16sp"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:visibility="gone" />
 
     </FrameLayout>

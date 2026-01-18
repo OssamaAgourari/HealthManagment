@@ -23,6 +23,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
 
     public interface OnAppointmentActionListener {
         void onCancelAppointment(Appointment appointment);
+        void onRateAppointment(Appointment appointment);
     }
 
     public AppointmentAdapter(OnAppointmentActionListener listener) {
@@ -62,6 +63,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         private TextView fee;
         private TextView reason;
         private Button cancelButton;
+        private Button rateButton;
 
         public AppointmentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,6 +75,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
             fee = itemView.findViewById(R.id.appointmentFee);
             reason = itemView.findViewById(R.id.appointmentReason);
             cancelButton = itemView.findViewById(R.id.cancelAppointmentButton);
+            rateButton = itemView.findViewById(R.id.rateAppointmentButton);
         }
 
         public void bind(Appointment appointment, OnAppointmentActionListener listener) {
@@ -127,6 +130,20 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
                         listener.onCancelAppointment(appointment);
                     }
                 });
+            }
+
+            // Show rate button only for completed appointments
+            if (rateButton != null) {
+                if (appointment.getStatus().equalsIgnoreCase("completed")) {
+                    rateButton.setVisibility(View.VISIBLE);
+                    rateButton.setOnClickListener(v -> {
+                        if (listener != null) {
+                            listener.onRateAppointment(appointment);
+                        }
+                    });
+                } else {
+                    rateButton.setVisibility(View.GONE);
+                }
             }
         }
     }

@@ -18,6 +18,7 @@ import com.example.health.databinding.ActivityMainBinding;
 import com.example.health.model.Appointment;
 import com.example.health.utils.NotificationHelper;
 import com.example.health.utils.NotificationScheduler;
+import com.example.health.utils.ThemeHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Apply theme before super.onCreate to avoid flickering
+        ThemeHelper.applyTheme(this);
+
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());

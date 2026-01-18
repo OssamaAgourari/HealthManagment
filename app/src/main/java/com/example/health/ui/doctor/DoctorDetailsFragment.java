@@ -11,18 +11,27 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.health.R;
+import com.example.health.adapters.ReviewAdapter;
 import com.example.health.databinding.FragmentDoctorDetailsBinding;
 import com.example.health.model.Doctor;
+import com.example.health.model.Review;
+import com.example.health.repository.ReviewRepository;
 import com.example.health.viewModels.DoctorViewModel;
+
+import java.util.List;
 
 public class DoctorDetailsFragment extends Fragment {
 
     private FragmentDoctorDetailsBinding binding;
     private DoctorViewModel viewModel;
+    private ReviewRepository reviewRepository;
+    private ReviewAdapter reviewAdapter;
 
     public DoctorDetailsFragment() {
         // Required empty public constructor
@@ -47,11 +56,19 @@ public class DoctorDetailsFragment extends Fragment {
         // Initialize ViewModel
         viewModel = new ViewModelProvider(this).get(DoctorViewModel.class);
 
+        // Initialize ReviewRepository and Adapter
+        reviewRepository = new ReviewRepository();
+        reviewAdapter = new ReviewAdapter();
+        binding.reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.reviewsRecyclerView.setAdapter(reviewAdapter);
+
         // Get doctor ID from arguments
+        String doctorId = null;
         if (getArguments() != null) {
-            String doctorId = getArguments().getString("doctorId");
+            doctorId = getArguments().getString("doctorId");
             if (doctorId != null) {
                 viewModel.loadDoctorById(doctorId);
+                loadReviews(doctorId);
             }
         }
 
@@ -102,6 +119,33 @@ public class DoctorDetailsFragment extends Fragment {
         binding.doctorDetailAddress.setText(doctor.getAddress() + ", " + doctor.getCity());
         binding.doctorDetailPhone.setText(doctor.getPhone());
         binding.doctorDetailDescription.setText(doctor.getDescription());
+    }
+
+    private void loadReviews(String doctorId) {
+        MutableLiveData<List<Review>> reviewsLiveData = new MutableLiveData<>();
+        MutableLiveData<String> errorLiveData = new MutableLiveData<>();
+
+        reviewRepository.getDoctorReviews(doctorId, reviewsLiveData, errorLiveData);
+
+        reviewsLiveData.observe(getViewLifecycleOwner(), reviews -> {
+            if (reviews != null && !reviews.isEmpty()) {
+                reviewAdapter.setReviews(reviews);
+                binding.reviewsRecyclerView.setVisibility(View.VISIBLE);
+                binding.noReviewsText.setVisibility(View.GONE);
+                binding.reviewsCountText.setText(reviews.size() + " avis");
+            } else {
+                binding.reviewsRecyclerView.setVisibility(View.GONE);
+                binding.noReviewsText.setVisibility(View.VISIBLE);
+                binding.reviewsCountText.setText("0 avis");
+            }
+        });
+
+        errorLiveData.observe(getViewLifecycleOwner(), error -> {
+            if (error != null && !error.isEmpty()) {
+                binding.noReviewsText.setVisibility(View.VISIBLE);
+                binding.noReviewsText.setText(error);
+            }
+        });
     }
 
     @Override

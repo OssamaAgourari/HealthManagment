@@ -9,10 +9,14 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -176,6 +180,15 @@ public class AppointmentRepository {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         Appointment appointment = document.toObject(Appointment.class);
                         appointment.setId(document.getId());
+
+                        // Auto-complete past appointments
+                        if (isPastAppointment(appointment) &&
+                            ("pending".equals(appointment.getStatus()) || "confirmed".equals(appointment.getStatus()))) {
+                            // Update status in Firestore
+                            markAsCompleted(appointment.getId());
+                            appointment.setStatus("completed");
+                        }
+
                         appointments.add(appointment);
                     }
                     Log.d(TAG, "Loaded " + appointments.size() + " appointments for patient");
@@ -185,6 +198,35 @@ public class AppointmentRepository {
                     Log.e(TAG, "Error loading appointments: " + e.getMessage());
                     errorLiveData.setValue("Erreur de chargement des rendez-vous");
                 });
+    }
+
+    // Check if appointment date/time is in the past
+    private boolean isPastAppointment(Appointment appointment) {
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+            String dateTimeStr = appointment.getDate() + " " + appointment.getTime();
+            Date appointmentDate = dateFormat.parse(dateTimeStr);
+
+            if (appointmentDate != null) {
+                return appointmentDate.before(new Date());
+            }
+        } catch (ParseException e) {
+            Log.e(TAG, "Error parsing appointment date: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Mark appointment as completed silently (no LiveData callback)
+    private void markAsCompleted(String appointmentId) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("status", "completed");
+        updates.put("updatedAt", FieldValue.serverTimestamp());
+
+        firestore.collection(COLLECTION)
+                .document(appointmentId)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "Auto-completed appointment: " + appointmentId))
+                .addOnFailureListener(e -> Log.e(TAG, "Error auto-completing: " + e.getMessage()));
     }
 
     // Cancel an appointment
@@ -205,6 +247,75 @@ public class AppointmentRepository {
                 .addOnFailureListener(e -> {
                     Log.e(TAG, "Error cancelling appointment: " + e.getMessage());
                     errorLiveData.setValue("Erreur lors de l'annulation");
+                });
+    }
+
+    // Get appointments for a specific patient filtered by status
+    public void getPatientAppointmentsByStatus(String patientId, String status,
+                                               MutableLiveData<List<Appointment>> appointmentsLiveData,
+                                               MutableLiveData<String> errorLiveData) {
+        firestore.collection(COLLECTION)
+                .whereEqualTo("patientId", patientId)
+                .whereEqualTo("status", status)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Appointment> appointments = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Appointment appointment = document.toObject(Appointment.class);
+                        appointment.setId(document.getId());
+                        appointments.add(appointment);
+                    }
+                    Log.d(TAG, "Loaded " + appointments.size() + " " + status + " appointments");
+                    appointmentsLiveData.setValue(appointments);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error loading appointments: " + e.getMessage());
+                    errorLiveData.setValue("Erreur de chargement des rendez-vous");
+                });
+    }
+
+    // Get upcoming appointments (pending or confirmed)
+    public void getUpcomingAppointments(String patientId,
+                                        MutableLiveData<List<Appointment>> appointmentsLiveData,
+                                        MutableLiveData<String> errorLiveData) {
+        firestore.collection(COLLECTION)
+                .whereEqualTo("patientId", patientId)
+                .whereIn("status", List.of("pending", "confirmed"))
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    List<Appointment> appointments = new ArrayList<>();
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        Appointment appointment = document.toObject(Appointment.class);
+                        appointment.setId(document.getId());
+                        appointments.add(appointment);
+                    }
+                    Log.d(TAG, "Loaded " + appointments.size() + " upcoming appointments");
+                    appointmentsLiveData.setValue(appointments);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error loading appointments: " + e.getMessage());
+                    errorLiveData.setValue("Erreur de chargement des rendez-vous");
+                });
+    }
+
+    // Mark appointment as completed
+    public void completeAppointment(String appointmentId,
+                                    MutableLiveData<Boolean> successLiveData,
+                                    MutableLiveData<String> errorLiveData) {
+        Map<String, Object> updates = new HashMap<>();
+        updates.put("status", "completed");
+        updates.put("updatedAt", FieldValue.serverTimestamp());
+
+        firestore.collection(COLLECTION)
+                .document(appointmentId)
+                .update(updates)
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Appointment completed");
+                    successLiveData.setValue(true);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e(TAG, "Error completing appointment: " + e.getMessage());
+                    errorLiveData.setValue("Erreur lors de la mise a jour");
                 });
     }
 }

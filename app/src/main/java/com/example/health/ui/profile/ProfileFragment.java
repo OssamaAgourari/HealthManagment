@@ -14,6 +14,7 @@ import androidx.navigation.Navigation;
 
 import com.example.health.R;
 import com.example.health.databinding.FragmentProfileBinding;
+import com.example.health.utils.ThemeHelper;
 import com.example.health.viewModels.ProfileViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -53,6 +54,19 @@ public class ProfileFragment extends Fragment {
         binding.editProfileButton.setOnClickListener(v ->
             Navigation.findNavController(requireView()).navigate(R.id.action_profileFragment_to_editProfileFragment)
         );
+
+        // Dark mode toggle
+        setupDarkModeToggle();
+    }
+
+    private void setupDarkModeToggle() {
+        // Set initial state
+        binding.darkModeSwitch.setChecked(ThemeHelper.isDarkMode(requireContext()));
+
+        // Handle toggle change
+        binding.darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            ThemeHelper.setDarkMode(requireContext(), isChecked);
+        });
     }
 
     @Override

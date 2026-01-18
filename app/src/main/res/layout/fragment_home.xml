@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#F5F5F5"
+    android:background="?attr/colorSurface"
     tools:context=".ui.home.HomeFragment">
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#4CAF50"
+            android:background="?attr/colorPrimary"
             android:padding="24dp"
             android:elevation="4dp">
 
@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="Bienvenue"
                 android:textSize="16sp"
-                android:textColor="#FFFFFF"
+                android:textColor="?attr/colorOnPrimary"
                 android:alpha="0.9" />
 
             <TextView
@@ -37,7 +37,7 @@
                 android:text="Utilisateur"
                 android:textSize="28sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
+                android:textColor="?attr/colorOnPrimary"
                 android:layout_marginTop="4dp" />
 
             <TextView
@@ -45,7 +45,7 @@
                 android:layout_height="wrap_content"
                 android:text="Comment pouvons-nous vous aider aujourd'hui?"
                 android:textSize="14sp"
-                android:textColor="#FFFFFF"
+                android:textColor="?attr/colorOnPrimary"
                 android:alpha="0.9"
                 android:layout_marginTop="8dp" />
         </LinearLayout>
@@ -63,7 +63,7 @@
                 android:text="Actions rapides"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#333333"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="16dp" />
 
             <!-- Row 1: Doctors and Appointments -->
@@ -75,7 +75,7 @@
                 android:layout_marginBottom="16dp">
 
                 <!-- Find Doctors Card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/findDoctorsCard"
                     android:layout_width="0dp"
                     android:layout_height="140dp"
@@ -85,15 +85,14 @@
                     app:cardElevation="4dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground">
+                    app:cardBackgroundColor="?attr/colorPrimaryContainer">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:padding="16dp"
-                        android:background="#E3F2FD">
+                        android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -105,17 +104,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Trouver un médecin"
+                            android:text="Trouver un medecin"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="#1976D2"
+                            android:textColor="?attr/colorOnPrimaryContainer"
                             android:textAlignment="center"
                             android:gravity="center" />
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- My Appointments Card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/myAppointmentsCard"
                     android:layout_width="0dp"
                     android:layout_height="140dp"
@@ -125,15 +124,14 @@
                     app:cardElevation="4dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground">
+                    app:cardBackgroundColor="?attr/colorSecondaryContainer">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:padding="16dp"
-                        android:background="#E8F5E9">
+                        android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -148,11 +146,11 @@
                             android:text="Mes rendez-vous"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="#388E3C"
+                            android:textColor="?attr/colorOnSecondaryContainer"
                             android:textAlignment="center"
                             android:gravity="center" />
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
             </LinearLayout>
 
             <!-- Row 2: Profile -->
@@ -163,7 +161,7 @@
                 android:weightSum="2">
 
                 <!-- Profile Card -->
-                <androidx.cardview.widget.CardView
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/profileCard"
                     android:layout_width="0dp"
                     android:layout_height="140dp"
@@ -173,15 +171,14 @@
                     app:cardElevation="4dp"
                     android:clickable="true"
                     android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground">
+                    app:cardBackgroundColor="?attr/colorTertiaryContainer">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         android:gravity="center"
-                        android:padding="16dp"
-                        android:background="#FFF3E0">
+                        android:padding="16dp">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -196,11 +193,11 @@
                             android:text="Mon profil"
                             android:textSize="14sp"
                             android:textStyle="bold"
-                            android:textColor="#F57C00"
+                            android:textColor="?attr/colorOnTertiaryContainer"
                             android:textAlignment="center"
                             android:gravity="center" />
                     </LinearLayout>
-                </androidx.cardview.widget.CardView>
+                </com.google.android.material.card.MaterialCardView>
 
                 <!-- Placeholder for future feature -->
                 <View
@@ -212,7 +209,7 @@
         </LinearLayout>
 
         <!-- Info Section -->
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
@@ -231,18 +228,18 @@
                     android:text="ℹ️ Besoin d'aide?"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="#333333"
+                    android:textColor="?attr/colorOnSurface"
                     android:layout_marginBottom="8dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Trouvez un médecin, réservez un rendez-vous et gérez vos consultations en quelques clics."
+                    android:text="Trouvez un medecin, reservez un rendez-vous et gerez vos consultations en quelques clics."
                     android:textSize="14sp"
-                    android:textColor="#666666"
+                    android:textColor="?attr/colorOnSurfaceVariant"
                     android:lineSpacingExtra="4dp" />
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </ScrollView>

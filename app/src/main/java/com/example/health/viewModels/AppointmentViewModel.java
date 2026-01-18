@@ -156,6 +156,27 @@ public class AppointmentViewModel extends ViewModel {
         isLoading.setValue(false);
     }
 
+    // Load appointments filtered by status
+    public void loadAppointmentsByStatus(String patientId, String status) {
+        isLoading.setValue(true);
+        repository.getPatientAppointmentsByStatus(patientId, status, appointments, errorMessage);
+        isLoading.setValue(false);
+    }
+
+    // Load upcoming appointments (pending or confirmed)
+    public void loadUpcomingAppointments(String patientId) {
+        isLoading.setValue(true);
+        repository.getUpcomingAppointments(patientId, appointments, errorMessage);
+        isLoading.setValue(false);
+    }
+
+    // Complete an appointment
+    public void completeAppointment(String appointmentId) {
+        isLoading.setValue(true);
+        repository.completeAppointment(appointmentId, cancelSuccess, errorMessage);
+        isLoading.setValue(false);
+    }
+
     // Formater la date
     private String formatDate(long timeInMillis) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());

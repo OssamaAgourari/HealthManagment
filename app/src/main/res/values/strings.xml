@@ -66,4 +66,32 @@
     <string name="menu_appointments">Rendez-vous</string>
     <string name="menu_book">Reserver</string>
     <string name="menu_profile">Profil</string>
+
+    <!-- Settings -->
+    <string name="settings">Parametres</string>
+    <string name="dark_mode">Mode sombre</string>
+    <string name="dark_mode_desc">Activer le theme sombre</string>
+
+    <!-- Appointment History -->
+    <string name="all_appointments">Tous</string>
+    <string name="upcoming_appointments">A venir</string>
+    <string name="completed_appointments">Termines</string>
+    <string name="cancelled_appointments">Annules</string>
+    <string name="filter_appointments">Filtrer</string>
+
+    <!-- Doctor Rating -->
+    <string name="rate_doctor">Noter le medecin</string>
+    <string name="your_rating">Votre note</string>
+    <string name="write_review">Ecrivez votre avis</string>
+    <string name="submit_review">Soumettre l\'avis</string>
+    <string name="reviews">Avis</string>
+    <string name="no_reviews">Aucun avis pour ce medecin</string>
+    <string name="review_submitted">Avis soumis avec succes</string>
+    <string name="already_reviewed">Vous avez deja donne votre avis</string>
+
+    <!-- PDF Export -->
+    <string name="export_pdf">Exporter en PDF</string>
+    <string name="pdf_exported">PDF exporte avec succes</string>
+    <string name="pdf_export_error">Erreur lors de l\'exportation</string>
+    <string name="appointment_history_report">Historique des rendez-vous</string>
 </resources>
