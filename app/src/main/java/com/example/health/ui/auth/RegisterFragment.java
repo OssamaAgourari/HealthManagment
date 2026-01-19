@@ -47,6 +47,9 @@ public class RegisterFragment extends Fragment {
         setupDatePicker();
         setupRegisterButton();
         observeViewModel();
+        binding.goToLogin.setOnClickListener(v ->
+                Navigation.findNavController(v).popBackStack()
+        );
     }
 
     private void setupDatePicker() {

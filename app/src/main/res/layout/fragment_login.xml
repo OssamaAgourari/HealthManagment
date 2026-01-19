@@ -78,7 +78,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Email"
-                    app:startIconDrawable="@android:drawable/ic_dialog_email">
+                    app:startIconDrawable="@drawable/email">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/emailInput"
@@ -96,7 +96,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Mot de passe"
                     android:layout_marginTop="16dp"
-                    app:startIconDrawable="@android:drawable/ic_lock_idle_lock"
+                    app:startIconDrawable="@drawable/password"
                     app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -129,7 +129,9 @@
                     android:textSize="16sp"
                     android:onClick="@{()->vm.login()}"
                     android:layout_marginTop="24dp"
-                    app:cornerRadius="12dp" />
+                    app:cornerRadius="12dp"
+                    app:iconGravity="textStart"
+                    app:icon="@drawable/login"/>
 
                 <!-- Divider -->
                 <LinearLayout

@@ -104,7 +104,7 @@
                         app:boxCornerRadiusTopEnd="8dp"
                         app:boxCornerRadiusBottomStart="8dp"
                         app:boxCornerRadiusBottomEnd="8dp"
-                        app:startIconDrawable="@android:drawable/ic_menu_call">
+                        app:startIconDrawable="@drawable/phone">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editPhone"

@@ -31,7 +31,7 @@
                 android:id="@+id/backButton"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:src="@android:drawable/ic_menu_revert"
+                android:src="@drawable/back"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 app:tint="?attr/colorOnPrimary"
                 android:contentDescription="@string/back" />
@@ -128,7 +128,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@android:drawable/ic_media_play"
+                        android:src="@drawable/play"
                         app:tint="?attr/colorOnSecondaryContainer"
                         android:contentDescription="@string/book_for_me" />
                 </LinearLayout>
@@ -156,7 +156,7 @@
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
-                        android:src="@drawable/doctors"
+                        android:src="@drawable/family"
                         app:tint="?attr/colorOnTertiaryContainer"
                         android:padding="12dp"
                         android:background="@drawable/circle_background"
@@ -189,7 +189,7 @@
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
-                        android:src="@android:drawable/ic_media_play"
+                        android:src="@drawable/play"
                         app:tint="?attr/colorOnTertiaryContainer"
                         android:contentDescription="@string/book_for_someone_else" />
                 </LinearLayout>

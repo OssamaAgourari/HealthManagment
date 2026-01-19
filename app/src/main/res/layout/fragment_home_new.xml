@@ -112,7 +112,7 @@
                         <ImageView
                             android:layout_width="40dp"
                             android:layout_height="40dp"
-                            android:src="@drawable/medical_services"
+                            android:src="@drawable/tip"
                             app:tint="#2E7D32"
                             android:layout_marginEnd="12dp"
                             android:contentDescription="@string/health_tip_title" />
@@ -335,7 +335,7 @@
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
-                            android:src="@android:drawable/ic_media_play"
+                            android:src="@drawable/play"
                             app:tint="#1976D2"
                             android:contentDescription="@string/book_appointment" />
                     </LinearLayout>

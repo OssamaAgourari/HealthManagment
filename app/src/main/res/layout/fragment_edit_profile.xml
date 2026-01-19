@@ -55,6 +55,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:startIconDrawable="@drawable/person"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxStrokeColor="?attr/colorPrimary"
                 app:hintTextColor="?attr/colorPrimary">
@@ -74,6 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:startIconDrawable="@drawable/person"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxStrokeColor="?attr/colorPrimary"
                 app:hintTextColor="?attr/colorPrimary">
@@ -93,6 +95,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:startIconDrawable="@drawable/phone"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxStrokeColor="?attr/colorPrimary"
                 app:hintTextColor="?attr/colorPrimary">
@@ -112,6 +115,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
+                app:startIconDrawable="@drawable/birthday"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 app:boxStrokeColor="?attr/colorPrimary"
                 app:hintTextColor="?attr/colorPrimary"

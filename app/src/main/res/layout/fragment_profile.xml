@@ -28,7 +28,7 @@
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:src="@android:drawable/ic_menu_edit"
+                android:src="@drawable/edit"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Modifier le profil"
                 app:tint="?attr/colorOnPrimary" />
@@ -152,7 +152,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@android:drawable/ic_menu_call"
+                        android:src="@drawable/phone"
                         app:tint="?attr/colorPrimary"
                         android:layout_marginEnd="16dp"
                         android:contentDescription="Phone" />
@@ -259,7 +259,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@android:drawable/ic_menu_view"
+                        android:src="@drawable/dark_mode"
                         app:tint="?attr/colorPrimary"
                         android:layout_marginEnd="16dp"
                         android:contentDescription="@string/dark_mode" />
@@ -294,16 +294,19 @@
             </androidx.cardview.widget.CardView>
 
             <!-- Logout Button -->
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/logoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="56dp"
                 android:text="Se deconnecter"
-                android:textSize="16sp"
-                android:textStyle="bold"
                 android:backgroundTint="?attr/colorError"
                 android:textColor="?attr/colorOnError"
-                android:layout_marginTop="8dp" />
+                android:textStyle="bold"
+                android:textSize="16sp"
+                app:cornerRadius="12dp"
+                app:iconGravity="textStart"
+                app:icon="@drawable/logout"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
 
     </LinearLayout>
