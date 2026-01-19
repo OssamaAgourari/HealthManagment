@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#F5F5F5"
+        android:background="?attr/colorSurface"
         tools:context=".ui.appointment.BookingChoiceFragment">
 
         <!-- Header -->
@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:orientation="horizontal"
-            android:background="#4CAF50"
+            android:background="?attr/colorPrimary"
             android:paddingStart="8dp"
             android:paddingEnd="16dp"
             android:gravity="center_vertical"
@@ -33,7 +33,7 @@
                 android:layout_height="48dp"
                 android:src="@android:drawable/ic_menu_revert"
                 android:background="?attr/selectableItemBackgroundBorderless"
-                app:tint="#FFFFFF"
+                app:tint="?attr/colorOnPrimary"
                 android:contentDescription="@string/back" />
 
             <TextView
@@ -43,7 +43,7 @@
                 android:text="@string/book_appointment_title"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
+                android:textColor="?attr/colorOnPrimary"
                 android:layout_marginStart="8dp" />
         </LinearLayout>
 
@@ -59,7 +59,7 @@
                 android:layout_width="80dp"
                 android:layout_height="80dp"
                 android:src="@drawable/medical_services"
-                app:tint="#4CAF50"
+                app:tint="?attr/colorPrimary"
                 android:layout_marginBottom="24dp"
                 android:contentDescription="@string/book_appointment_title" />
 
@@ -69,7 +69,7 @@
                 android:text="@string/book_appointment_title"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="#333333"
+                android:textColor="?attr/colorOnSurface"
                 android:layout_marginBottom="32dp" />
 
             <!-- Book for Me Card -->
@@ -90,13 +90,13 @@
                     android:orientation="horizontal"
                     android:padding="20dp"
                     android:gravity="center_vertical"
-                    android:background="#E8F5E9">
+                    android:background="?attr/colorSecondaryContainer">
 
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/person"
-                        app:tint="#2E7D32"
+                        app:tint="?attr/colorOnSecondaryContainer"
                         android:padding="12dp"
                         android:background="@drawable/circle_background"
                         android:layout_marginEnd="16dp"
@@ -114,14 +114,14 @@
                             android:text="@string/book_for_me"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            android:textColor="#2E7D32" />
+                            android:textColor="?attr/colorOnSecondaryContainer" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/book_for_me_desc"
                             android:textSize="14sp"
-                            android:textColor="#666666"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:layout_marginTop="4dp" />
                     </LinearLayout>
 
@@ -129,7 +129,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_media_play"
-                        app:tint="#2E7D32"
+                        app:tint="?attr/colorOnSecondaryContainer"
                         android:contentDescription="@string/book_for_me" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -151,13 +151,13 @@
                     android:orientation="horizontal"
                     android:padding="20dp"
                     android:gravity="center_vertical"
-                    android:background="#E3F2FD">
+                    android:background="?attr/colorTertiaryContainer">
 
                     <ImageView
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/doctors"
-                        app:tint="#1976D2"
+                        app:tint="?attr/colorOnTertiaryContainer"
                         android:padding="12dp"
                         android:background="@drawable/circle_background"
                         android:layout_marginEnd="16dp"
@@ -175,14 +175,14 @@
                             android:text="@string/book_for_someone_else"
                             android:textSize="18sp"
                             android:textStyle="bold"
-                            android:textColor="#1976D2" />
+                            android:textColor="?attr/colorOnTertiaryContainer" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/book_for_someone_else_desc"
                             android:textSize="14sp"
-                            android:textColor="#666666"
+                            android:textColor="?attr/colorOnSurfaceVariant"
                             android:layout_marginTop="4dp" />
                     </LinearLayout>
 
@@ -190,7 +190,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@android:drawable/ic_media_play"
-                        app:tint="#1976D2"
+                        app:tint="?attr/colorOnTertiaryContainer"
                         android:contentDescription="@string/book_for_someone_else" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

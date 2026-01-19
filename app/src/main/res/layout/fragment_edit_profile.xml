@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#F5F5F5"
+    android:background="?attr/colorSurface"
     tools:context=".ui.profile.EditProfileFragment">
 
     <LinearLayout
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:background="#4CAF50"
+            android:background="?attr/colorPrimary"
             android:padding="24dp"
             android:gravity="center"
             android:elevation="4dp">
@@ -38,7 +38,7 @@
                 android:text="Modifier le profil"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF" />
+                android:textColor="?attr/colorOnPrimary" />
 
         </LinearLayout>
 
@@ -56,8 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="#4CAF50"
-                app:hintTextColor="#4CAF50">
+                app:boxStrokeColor="?attr/colorPrimary"
+                app:hintTextColor="?attr/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editFirstName"
@@ -75,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="#4CAF50"
-                app:hintTextColor="#4CAF50">
+                app:boxStrokeColor="?attr/colorPrimary"
+                app:hintTextColor="?attr/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editLastName"
@@ -94,8 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="#4CAF50"
-                app:hintTextColor="#4CAF50">
+                app:boxStrokeColor="?attr/colorPrimary"
+                app:hintTextColor="?attr/colorPrimary">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editPhone"
@@ -113,8 +113,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                app:boxStrokeColor="#4CAF50"
-                app:hintTextColor="#4CAF50"
+                app:boxStrokeColor="?attr/colorPrimary"
+                app:hintTextColor="?attr/colorPrimary"
                 app:endIconMode="custom"
                 app:endIconDrawable="@drawable/calendar">
 
@@ -135,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:text="Genre"
                 android:textSize="14sp"
-                android:textColor="#666666"
+                android:textColor="?attr/colorOnSurfaceVariant"
                 android:layout_marginBottom="8dp" />
 
             <RadioGroup
@@ -151,14 +151,14 @@
                     android:layout_height="wrap_content"
                     android:text="Homme"
                     android:layout_marginEnd="24dp"
-                    android:buttonTint="#4CAF50" />
+                    android:buttonTint="?attr/colorPrimary" />
 
                 <RadioButton
                     android:id="@+id/radioFemale"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Femme"
-                    android:buttonTint="#4CAF50" />
+                    android:buttonTint="?attr/colorPrimary" />
 
             </RadioGroup>
 
@@ -169,7 +169,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:indeterminateTint="#4CAF50" />
+                android:indeterminateTint="?attr/colorPrimary" />
 
             <!-- Save Button -->
             <Button
@@ -179,8 +179,8 @@
                 android:text="Enregistrer"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:backgroundTint="#4CAF50"
-                android:textColor="#FFFFFF"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="?attr/colorOnPrimary"
                 android:layout_marginTop="8dp" />
 
             <!-- Cancel Button -->
@@ -191,8 +191,8 @@
                 android:text="Annuler"
                 android:textSize="16sp"
                 style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                android:strokeColor="#4CAF50"
-                android:textColor="#4CAF50"
+                android:strokeColor="?attr/colorPrimary"
+                android:textColor="?attr/colorPrimary"
                 android:layout_marginTop="8dp" />
 
         </LinearLayout>

@@ -53,8 +53,8 @@
                 android:text="En attente"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                android:background="@android:color/holo_orange_dark"
+                android:textColor="?attr/colorOnTertiary"
+                android:background="?attr/colorTertiary"
                 android:padding="6dp"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
@@ -117,7 +117,7 @@
                 android:text="50€"
                 android:textSize="14sp"
                 android:textStyle="bold"
-                android:textColor="#4CAF50" />
+                android:textColor="?attr/colorSecondary" />
         </LinearLayout>
 
         <!-- Reason (if provided) -->
@@ -146,8 +146,8 @@
                 android:layout_height="40dp"
                 android:text="@string/rate_doctor"
                 android:textSize="14sp"
-                android:backgroundTint="#2196F3"
-                android:textColor="#FFFFFF"
+                android:backgroundTint="?attr/colorPrimary"
+                android:textColor="?attr/colorOnPrimary"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:layout_marginEnd="8dp"
@@ -159,8 +159,8 @@
                 android:layout_height="40dp"
                 android:text="Annuler"
                 android:textSize="14sp"
-                android:backgroundTint="#F44336"
-                android:textColor="#FFFFFF"
+                android:backgroundTint="?attr/colorError"
+                android:textColor="?attr/colorOnError"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp" />
         </LinearLayout>
